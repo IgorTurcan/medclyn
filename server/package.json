@@ -1,0 +1,50 @@
+{
+  "name": "medclyn_full",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "client": "npm run start --prefix ../client",
+    "server": "nodemon app.js",
+    "start": "node app.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IgorTurcan/medclyn_full.git"
+  },
+  "keywords": [
+    "medclyn"
+  ],
+  "author": "Turcan Igor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IgorTurcan/medclyn_full/issues"
+  },
+  "homepage": "https://github.com/IgorTurcan/medclyn_full#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "concurrently": "^6.0.0",
+    "config": "^3.3.3",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.10.0",
+    "google-auth-library": "^0.12.0",
+    "googleapis": "^39.2.0",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
+    "multer": "^1.4.2",
+    "mysql-await": "^2.1.6",
+    "nodemailer": "^6.5.0",
+    "path": "^0.12.7",
+    "readline": "^1.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

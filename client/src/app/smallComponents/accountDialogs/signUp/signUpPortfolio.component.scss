@@ -1,0 +1,41 @@
+* {
+    color: #0077b6;
+}
+    
+form {
+    text-align: center;
+}
+
+.input {
+    width: 100%;
+}
+    
+.textarea {
+    width: 100%;
+}
+
+.action {
+    justify-content: center;
+}
+    
+.text-danger {
+    color: #E34141;
+}
+
+label {
+    margin-top: 15%;
+}
+
+.password, .repeatPassword {
+    width: 95%; 
+}
+
+mat-icon {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 800px) and (min-width: 500px)  {
+    .password, .repeatPassword {
+        width: 90%; 
+    }
+}

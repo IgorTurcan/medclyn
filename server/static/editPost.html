@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Edit a post</h1>
+    <form action="/post/edit" enctype="multipart/form-data" method="post">
+        <label for="previousTitle">Previous title:</label><br>
+        <input type="text" name="previousTitle" value="John"><br>
+        <label for="newTitle">New title:</label><br>
+        <input type="text" name="newTitle" value="John"><br>
+        <label for="subtitle">Subtitle:</label><br>
+        <input type="text" name="subtitle" value="Doe"><br><br>
+
+        <input type="file" name="photos" multiple><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
