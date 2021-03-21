@@ -1,0 +1,59 @@
+<form [formGroup]="Data">
+    <h1 mat-dialog-title>Creează un cont</h1>
+
+    <mat-form-field class="input" appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput class="email"
+        [class.is-invalid]="cardEmail.invalid"
+        formControlName="cardEmail" name="email">
+        <mat-hint *ngIf="cardEmail.invalid && cardEmail.touched">
+            <small *ngIf="cardEmail.errors?.required" class="text-danger">
+                Intruduceți un email</small>
+            <small *ngIf="cardEmail.errors?.pattern" class="text-danger">
+                Intruduceți un email valid
+            </small>
+        </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="input" appearance="fill">
+        <mat-label>Parolă</mat-label>
+        <input matInput class="password" [type]="passType"
+        [class.is-invalid]="cardPassword.invalid"
+        formControlName="cardPassword" name="password">
+        <mat-icon (click)="showPass()">remove_red_eye</mat-icon>
+        <mat-hint *ngIf="cardPassword.invalid && cardPassword.touched">
+            <small *ngIf="cardPassword.errors?.required" class="text-danger">
+                Intruduceți o parolă</small>
+            <small *ngIf="cardPassword.errors?.pattern" class="text-danger">
+                Parola trebuie să conţină între 3 şi 45 litere ale alfabetului român
+            </small>
+        </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="input" appearance="fill">
+        <mat-label>Confirmați parola</mat-label>
+        <input matInput class="repeatPassword" [type]="passReType"
+        [class.is-invalid]="cardRepeatPassword.invalid"
+        formControlName="cardRepeatPassword" (input)="checkPass()">
+        <mat-icon (click)="showRePass()">remove_red_eye</mat-icon>
+        <mat-hint *ngIf="cardRepeatPassword.touched">
+            <small *ngIf="cardRepeatPassword.errors?.required" class="text-danger">
+                Intruduceți parola</small>
+            <small *ngIf="!passwordOK" class="text-danger">
+                Introduceți o parolă identică cu prima
+            </small>
+        </mat-hint>
+    </mat-form-field>
+
+    <br>
+
+    <button mat-raised-button style="font-size: 115%"
+        [disabled]="(
+        (!cardEmail.invalid && cardEmail.touched) &&
+        (!cardPassword.invalid && cardPassword.touched) && passwordOK
+    ) ? false : true"
+    (click)="register()">Registrează-te</button><br>
+    <span style="font-size: 80%;">Sau logează-te cu</span><br>
+    <!-- <app-google-auth-button (click)="foreignRegister()"></app-google-auth-button>&nbsp;
+    <app-facebook-auth-button (click)="foreignRegister()"></app-facebook-auth-button> -->
+</form>

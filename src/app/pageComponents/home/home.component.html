@@ -1,0 +1,167 @@
+<div class="sect1"> 
+    <p class="title">Pentru medii sterile</p>
+    <p class="content">MedClyn este o soluție de acoperire a pereților și
+        a tavanului destinată mediilor cu standarde înalte
+        de asepsie și igienă. Sistemele de igienă MedClyn
+        sunt ideale pentru standardele HACCP, ISO 14644-1,
+        ISO 22000.
+    </p>
+    <button mat-raised-button (click)="openBottomSheet()">Contactează-ne</button>
+</div>
+<div class="grid-container c1">
+    <div class="grid-item item1">
+        <p class="title">
+            Nou în România, larg utilizat în Europa
+        </p>
+        <span class="content">
+            <b>MedClyn</b> este un sistem de plăci cu grosime de 2-3mm
+            din rășini compozite, albe, netede, lucioase, fabricate
+            în conformitate cu normele sanitare europene. Plăcile
+            <b>MedClyn</b> sunt <b>hidrofobe, rezistente la putregai, inalterabile,
+            anti-ciuperci, antioxidante, bacteriostatice</b>. Sistemul
+            este special conceput pentru modernizarea laboratoarelor
+            de alimente, camerelor specifice industriei agro-alimentare,
+            bucătăriilor profesionale, camerelor sterile și în
+            general industriei medicale.
+        </span>
+    </div>
+    <div class="grid-item item2">
+        <p class="title">
+            De ce să optați pentru sistemul MedClyn?
+        </p>
+        <span class="content">
+            Pentru a răspunde <b>condițiilor de igienă</b>. Pentru a vă bucura de un
+            mediu de lucru foarte <b>rezistent la șocuri sau atacuri chimice, umiditate</b>.
+            Pentru renovarea mediului de lucru (bucătărie , cameră frigorifică, depozite). 
+            Pentru <b>absența aderenței germenilor datorită suprafeței netede</b>. Pentru 
+            <b>caracterisicile hidrofobe, rezistente la putregai, inalterabile, anti-ciuperci,
+            antioxidante, bacteriostatice</b>.
+        </span>
+    </div>
+    <div class="grid-item item3">
+        <p class="title">
+            Ce este MedClyn?
+        </p>
+        <span class="content">
+            După ani de cercetare, <b>MedClyn</b> este rezultatul optim pentru
+            acoperirea pereților și a tavanelor ce îndeplinește <b>cele mai
+            stricte</b> condiții igienice și aseptice. Sistemul MedClyn oferă
+            toate accesoriile de finisare pentru a respecta standardele
+            Direcției Sanitar Veterianare. Are o rezistență la orice test 
+            care respectă cele mai stricte cerințe DSV. Masa plăcilor noastre
+            de perete și tavan este realizată din rășină de poliester și
+            fibră de sticlă combinate. Această suprafață este imaculată
+            și strălucitoare ceea ce o face ușor lavabilă.
+        </span>
+    </div>  
+</div>
+<div class="grid-container c2">
+
+    <div class="grid-item item1">
+        <p class="title">Domenii de utilizare</p>
+    </div>
+
+    <div class="card mat-elevation-z2" (click)="toAreas()"
+    (mouseenter)="turnCard(1)"
+    (mouseleave)="turnCard(1)">
+        <div class="face front">
+            <img mat-card-image src="../../../assets/images/home/industria_alimentara.jpg">
+            <p class="title">Industria alimentară</p>
+        </div>
+        <div class="face back"
+        [@contentAppear]="state1"> 
+            <p class="content">
+                Abatoare, tăiere, dezosare, unitate de umplere, sală de fabricație, sărare, gătit,
+                refrigerare, prelucrare depozitare, zonă de gătit, coridoare, rezerve, vestiare, toalete.
+            </p>
+        </div>
+    </div>
+    <div class="card mat-elevation-z2" (click)="toAreas()"
+    (mouseenter)="turnCard(2)"
+    (mouseleave)="turnCard(2)">
+        <div class="face front">
+            <img mat-card-image src="../../../assets/images/home/cabinet_dentist.jpg">
+            <p class="title">Domeniu medical</p>
+        </div>
+        <div class="face back"
+        [@contentAppear]="state2"> 
+            <p class="content">
+                Săli de operație, camere sterile, săli de terapie, camere de supraveghere
+                post-operatorie, în circuitul lenjeriei și al deșeurilor, holuri,
+                spălătorii, bucătării, băi pentru pacienți.
+            </p>
+        </div>
+    </div>
+    <div class="card mat-elevation-z2" (click)="toAreas()"
+    (mouseenter)="turnCard(3)"
+    (mouseleave)="turnCard(3)">
+        <div class="face front">
+            <img mat-card-image src="../../../assets/images/home/bucatarie.jpg">
+            <p class="title">Bucătării profesionale</p>
+        </div>
+        <div class="face back"
+        [@contentAppear]="state3"> 
+            <p class="content">
+                Bucătăriile restaurantelor, companiilor, școlarilor, spitalelor, hotelurilor, pensiunilor.
+            </p>
+        </div>
+    </div>
+
+</div>
+<div class="grid-container c3">
+    <div class="grid-item item1">
+        <p class="title">Avantaje</p>
+    </div>
+
+    <div class="card mat-elevation-z2" (click)="toAdvantages()"
+    (mouseenter)="turnCard(4)"
+    (mouseleave)="turnCard(4)">
+        <div class="face front">
+            <img mat-card-image src="../../../assets/images/home/sala_operatie.jpg">
+            <p class="title">Pentru spații noi sau în renovare</p>
+        </div>
+        <div class="face back"
+        [@contentAppear]="state4"> 
+            <p class="content">
+                Sistemul MedClyn este recomadat acoperirii pereților clădirilor noi, precum
+                și a oricărui suport de perete deteriorat sau care nu mai respectă standardele.
+                Plăcile sunt fabricate într-o singură masă compozită întărită cu fibre
+                de sticlă: rezistență mecanică foarte ridicată.
+            </p>
+        </div>
+    </div>
+    <div class="card mat-elevation-z2" (click)="toAdvantages()"
+    (mouseenter)="turnCard(5)"
+    (mouseleave)="turnCard(5)">
+        <div class="face front">
+            <img mat-card-image src="../../../assets/images/home/om_de_stiintajpg.jpg">
+            <p class="title">Specificațiile tehnice ale plăcilor nostre</p>
+        </div>
+        <div class="face back"
+        [@contentAppear]="state5"> 
+            <p class="content">
+                Lățime: 120 cm-300 cm Lungime: de la 200 la 1000 cm.
+                Culoare: alb strălucitor (RAL 9010).
+            </p>
+        </div>
+    </div>
+    <div class="card mat-elevation-z2" (click)="toAdvantages()"
+    (mouseenter)="turnCard(6)"
+    (mouseleave)="turnCard(6)">
+        <div class="face front">
+            <img mat-card-image src="../../../assets/images/placa_orizontala.jpg">
+            <p class="title">Câștig în timp și în igienă</p>
+        </div>
+        <div class="face back"
+        [@contentAppear]="state6"> 
+            <p class="content">
+                Unii utilizatori ne-au raportat că curățarea foilor noastre reduce timpul
+                de 4 ori în comparație cu aceeași suprafață gresie anterior. Fața
+                vizibilă a plăcii noastre este îmbrăcată în Gelcoat de înaltă densitate,
+                porozitatea sa este aproape zero (10x mai mică decât PVC-ul termoplastic).
+            </p>
+        </div>
+    </div>
+
+</div>
+<app-brandDiv></app-brandDiv>

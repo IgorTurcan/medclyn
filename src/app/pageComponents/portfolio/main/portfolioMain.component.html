@@ -1,0 +1,33 @@
+<div  [ngClass]="{
+  'grid-container c1': (innerWidth > 1000),
+  'grid-container c2': (innerWidth <= 1000)
+ }">
+  <div class="grid-item" *ngFor="let portfolioCard of portfolioCards">
+    <mat-card class="card">
+      <mat-card-header>
+        <div mat-card-avatar class="header">
+          <mat-icon class="avatar" [inline]="true">location_on</mat-icon>
+        </div>
+        <mat-card-title> {{ portfolioCard.title }} </mat-card-title>
+        <mat-card-subtitle> {{ portfolioCard.subtitle }} </mat-card-subtitle>
+      </mat-card-header>
+      <carousel width="400" height="320" cellsToShow="1" loop="true" 
+      overflowCellsLimit="2" autoplay="true" autoplayInterval="2200" dots="true"
+      transitionTimingFunction="linear" lightDOM="true">
+      <div class="carousel-cell" *ngFor="let path of portfolioCard.paths">
+        <img [src]="path">
+      </div>
+      </carousel>
+      <mat-card-actions>
+        <button mat-button 
+        (click)="portfolioCard.showLightbox()">
+        Mărime full screen</button>
+        <ng-image-fullscreen-view
+        [images]="portfolioCard.images" [imageIndex]="portfolioCard.selectedImageIndex"
+        [show]="portfolioCard.showFlag" [paginationShow]="true" [animationSpeed]="0.4"
+        (close)="portfolioCard.closeEventHandler()"></ng-image-fullscreen-view>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+<app-edit-floating-button></app-edit-floating-button>

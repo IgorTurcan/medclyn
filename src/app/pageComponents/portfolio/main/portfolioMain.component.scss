@@ -1,0 +1,46 @@
+.c1 {
+    display: grid;
+    grid-template-columns: auto auto;
+    row-gap: 80px;
+    margin: 5% 12% 5% 12%;
+    justify-items: center;
+    align-items: center;
+
+    .grid-item:nth-child(odd):last-child {
+        grid-column: 1/ span 2;
+    }
+}
+
+.c2 {
+    display: grid;
+    grid-template-columns: auto;
+    row-gap: 80px;
+    margin: 5% 12% 5% 12%;
+    justify-items: center;
+    align-items: center;
+}
+
+.c1, .c2 {
+    .card {
+        border-radius: 12px;
+        text-align: center;
+        .avatar {
+            border-radius: 100%;
+            font-size: 200%;
+            border-bottom: 4px solid #0282C5;
+            color: #0282C5;
+        }
+        carousel {
+            border-radius: inherit;
+            overflow: hidden;
+            z-index: 5;
+        }
+        .mat-button {
+            font-size: 100%;
+            color: #0282C5;
+        }
+        &:hover {
+            box-shadow: 4px 8px 16px 4px rgba(0,0,0,0.2);
+        }
+    }
+}

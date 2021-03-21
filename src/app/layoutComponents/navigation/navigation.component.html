@@ -1,0 +1,60 @@
+<mat-sidenav-container class="sidenav-container" (authEvent)="changeOnAuth()">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(innerWidth <= 1000) ? 'dialog' : 'navigation'"
+      [mode]="(innerWidth <= 1000) ? 'over' : 'side'"
+      [opened]="false">
+    <mat-nav-list class="nav-list">
+      <a mat-list-item [routerLink]="'/home'" (click)="close()">Acasă</a><br>
+      <a mat-list-item [routerLink]="'/advantages'" (click)="close()">Avantaje</a><br>
+      <a mat-list-item [routerLink]="'/areas'" (click)="close()">Domenii</a><br>
+      <a mat-list-item [routerLink]="'/portfolio'" (click)="close()">Portofoliu</a><br>
+      <a mat-list-item [routerLink]="'/technical'" (click)="close()">Tehnic</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar class="mat-elevation-z8">
+
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="innerWidth <= 1000">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+
+      <span class="spacer" *ngIf="innerWidth <= 1000"></span>
+
+      <div *ngIf="innerWidth <= 1000">
+        <a mat-button class="logInOrOut" (click)="logInOrLogOutFunc()">{{ logInOrLogOut }}</a>
+        <a mat-button class="registerOrUsername" (click)="registerOrUsernameFunc()">{{ registerOrUsername }}</a>          
+      </div>
+
+      <span class="spacer" *ngIf="innerWidth <= 1000"></span>
+
+      <a mat-button *ngIf="innerWidth <= 1000" [routerLink]="'/home'">MedClyn</a>
+      <img class="logo" src="../../assets/images/logo.png" (click)="toHome()">
+      
+      <div class="hide-on-med" *ngIf="!(innerWidth <= 1000)">
+        <a mat-button [routerLink]="'/home'">MedClyn</a>
+        <a mat-button [routerLink]="'/advantages'">Avantaje</a>
+        <a mat-button [routerLink]="'/areas'">Domenii</a>
+        <a mat-button [routerLink]="'/portfolio'">Portofoliu</a>
+        <a mat-button [routerLink]="'/technical'">Tehnic</a>
+      </div>
+
+      <span class="spacer" *ngIf="!(innerWidth <= 1000)"></span>
+
+      <div class="hide-on-med" *ngIf="!(innerWidth <= 1000)" >
+        <a mat-button class="logInOrOut" (click)="logInOrLogOutFunc()">{{ logInOrLogOut }}</a>
+        <a mat-button class="registerOrUsername" (click)="registerOrUsernameFunc()">{{ registerOrUsername }}</a>          
+      </div>
+
+    </mat-toolbar>
+    <span #top></span>
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+    <app-top-floating-button></app-top-floating-button>
+    <app-call-floating-button></app-call-floating-button>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,57 @@
+<form [formGroup]="Data">
+    <h1 mat-dialog-title>Adaugă postarea</h1>
+
+    <mat-form-field class="input" appearance="fill">
+        <mat-label>Denumire</mat-label>
+        <input matInput class="title"
+        [class.is-invalid]="cardTitle.invalid"
+        formControlName="cardTitle">
+        <mat-hint *ngIf="cardTitle.invalid && cardTitle.touched">
+            <small *ngIf="cardTitle.errors?.required" class="text-danger">
+                Intruduceți o denumire</small>
+            <small *ngIf="cardTitle.errors?.pattern" class="text-danger">
+                Denumirea trebuie să conţină între 3 şi 35 litere ale alfabetului român
+            </small>
+        </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="input" appearance="fill">
+        <mat-label>Locație</mat-label>
+        <input matInput class="subtitle"
+        [class.is-invalid]="cardSubtitle.invalid"
+        formControlName="cardSubtitle">
+        <mat-hint *ngIf="cardSubtitle.invalid && cardSubtitle.touched">
+            <small *ngIf="cardTitle.errors?.required" class="text-danger">
+                Intruduceți o locație</small>
+            <small *ngIf="cardSubtitle.errors?.pattern" class="text-danger">
+                Locația trebuie să conţină între 3 şi 45 litere ale alfabetului român
+            </small>
+        </mat-hint>
+    </mat-form-field>
+
+    <mat-chip-list cdkDropList 
+    cdkDropListOrientation="horizontal">
+        <mat-chip cdkDrag 
+        *ngFor="let imageName of imageNames" 
+        [selectable]="true" [removable]="true" (removed)="remove(imageName)">
+        {{imageName}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <mat-chip>
+            <label for="file"><mat-icon>add_circle_outline</mat-icon></label>
+        </mat-chip>
+        <input type="file" name="file" id="file" class="inputfile"
+        accept=".jpg, .png, .jpeg"
+        (change)="onFileChanged($event)" style="visibility: hidden;"/>
+    </mat-chip-list>
+
+    <div class="action" mat-dialog-actions>
+        <button mat-raised-button 
+            [disabled]="(
+            (!cardTitle.invalid && cardTitle.touched) &&
+            (!cardSubtitle.invalid && cardSubtitle.touched) &&
+            images.length >= 1
+        ) ? false : true"
+        (click)="addCard()">Adaugă</button>        
+    </div>
+</form>
