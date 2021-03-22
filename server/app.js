@@ -1,4 +1,5 @@
 import express from 'express';
+import https from 'https';
 import { router as userRouter } from './routes/user.routes.js';
 import { router as postRouter } from './routes/post.routes.js';
 import { router as serviceRouter } from './routes/service.routes.js';
@@ -11,6 +12,10 @@ import methodOverride from 'method-override';
 import cors from 'cors';
 
 const __dirname = path.resolve();
+const options = {
+    key: fs.readFileSync('security/key.pem'),
+    cert: fs.readFileSync('security/cert.pem')
+};
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +34,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,'static/home.html'));
 });
 
-app.listen(PORT, () => {
+https.createServer(options, app)
+.listen(PORT, () => {
     console.log(`Server listening on the port::${PORT}`);
 });
