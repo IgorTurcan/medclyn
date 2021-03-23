@@ -32,7 +32,7 @@
 
       <span class="spacer" *ngIf="innerWidth <= 1000"></span>
 
-      <a mat-button class="logo-txt" ="innerWidth <= 1000" [routerLink]="'/home'">MedClyn</a>
+      <a mat-button class="logo-txt" *ngIf="innerWidth <= 1000" [routerLink]="'/home'">MedClyn</a>
       <img class="logo" src="https://igorturcan.github.io/medclyn/assets/images/logo.png" (click)="toHome()">
       
       <div class="hide-on-med" *ngIf="!(innerWidth <= 1000)">
