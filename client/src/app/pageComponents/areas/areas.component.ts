@@ -18,17 +18,17 @@ export class AreasComponent implements OnInit {
 
   onResize() {
     if(window.innerWidth <= 1000) { 
-      this.img1 = '../../../assets/images/areas/cabinet1.jpg';
-      this.img2 = '../../../assets/images/areas/industria_alimentara1.jpg';
-      this.img3 = '../../../assets/images/areas/bucatarie1.jpg';
-      this.img4 = '../../../assets/images/areas/usi1.jpg';
-      this.img5 = '../../../assets/images/areas/placa_vertical1.jpg';
+      this.img1 = 'https://igorturcan.github.io/medclyn/assets/images/areas/cabinet1.jpg';
+      this.img2 = 'https://igorturcan.github.io/medclyn/assets/images/areas/industria_alimentara1.jpg';
+      this.img3 = 'https://igorturcan.github.io/medclyn/assets/images/areas/bucatarie1.jpg';
+      this.img4 = 'https://igorturcan.github.io/medclyn/assets/images/areas/usi1.jpg';
+      this.img5 = 'https://igorturcan.github.io/medclyn/assets/images/areas/placa_vertical1.jpg';
     } else {
-      this.img1 = '../../../assets/images/areas/cabinet.jpg';
-      this.img2 = '../../../assets/images/areas/industria_alimentara.jpg';
-      this.img3 = '../../../assets/images/areas/bucatarie.jpg';
-      this.img4 = '../../../assets/images/areas/usi.jpg';
-      this.img5 = '../../../assets/images/areas/placa_vertical.jpg';
+      this.img1 = 'https://igorturcan.github.io/medclyn/assets/images/areas/cabinet.jpg';
+      this.img2 = 'https://igorturcan.github.io/medclyn/assets/images/areas/industria_alimentara.jpg';
+      this.img3 = 'https://igorturcan.github.io/medclyn/assets/images/areas/bucatarie.jpg';
+      this.img4 = 'https://igorturcan.github.io/medclyn/assets/images/areas/usi.jpg';
+      this.img5 = 'https://igorturcan.github.io/medclyn/assets/images/areas/placa_vertical.jpg';
     }
   }
 

@@ -17,9 +17,9 @@ export class TechnicalComponent implements OnInit {
 
   onResize() {
     if(window.innerWidth <= 1000) { 
-      this.img = '../../../assets/images/areas/../placa_orizontala1.jpg';
+      this.img = 'https://igorturcan.github.io/medclyn/assets/images/areas/../placa_orizontala1.jpg';
     } else {
-      this.img = '../../../assets/images/areas/../placa_orizontala.jpg';
+      this.img = 'https://igorturcan.github.io/medclyn/assets/images/areas/../placa_orizontala.jpg';
     }
   }
 

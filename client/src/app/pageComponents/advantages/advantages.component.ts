@@ -18,15 +18,15 @@ export class AdvantagesComponent implements OnInit {
 
   onResize() {
     if(window.innerWidth <= 1000) { 
-      this.img1 = '../../../assets/images/advantages/femeie1.jpg';
-      this.img2 = '../../../assets/images/placa_orizontala1.jpg';
-      this.img3 = '../../../assets/images/advantages/perete1.jpg';
-      this.img4 = '../../../assets/images/advantages/doctori1.jpg';
+      this.img1 = 'https://igorturcan.github.io/medclyn/assets/images/advantages/femeie1.jpg';
+      this.img2 = 'https://igorturcan.github.io/medclyn/assets/images/placa_orizontala1.jpg';
+      this.img3 = 'https://igorturcan.github.io/medclyn/assets/images/advantages/perete1.jpg';
+      this.img4 = 'https://igorturcan.github.io/medclyn/assets/images/advantages/doctori1.jpg';
     } else {
-      this.img1 = '../../../assets/images/advantages/femeie.jpg';
-      this.img2 = '../../../assets/images/placa_orizontala.jpg';
-      this.img3 = '../../../assets/images/advantages/perete.jpg';
-      this.img4 = '../../../assets/images/advantages/doctori.jpg';
+      this.img1 = 'https://igorturcan.github.io/medclyn/assets/images/advantages/femeie.jpg';
+      this.img2 = 'https://igorturcan.github.io/medclyn/assets/images/placa_orizontala.jpg';
+      this.img3 = 'https://igorturcan.github.io/medclyn/assets/images/advantages/perete.jpg';
+      this.img4 = 'https://igorturcan.github.io/medclyn/assets/images/advantages/doctori.jpg';
     }
   }
 
