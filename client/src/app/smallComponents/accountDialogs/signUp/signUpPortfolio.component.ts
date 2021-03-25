@@ -73,7 +73,7 @@ export class SignUpPortfolioComponent {
     this.apiService.userRegister(email, password)
       .subscribe(
         (res) => { 
-          this.authService.logIn(email, password);  
+          this.authService.logIn(email);  
 
           this._snackBar.open(res[Object.keys(res)[0]], "Great!", {
             duration: 5000,

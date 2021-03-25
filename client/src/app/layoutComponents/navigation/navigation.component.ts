@@ -48,6 +48,10 @@ export class NavigationComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+  mobileSize(): boolean {
+    return this.innerWidth <= 900;
+  }
+
   logInOrLogOutFunc() { 
     if(this.authService.isAuthenticated()) {
       this.authService.logOut();

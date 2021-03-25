@@ -52,7 +52,7 @@ export class SignInPortfolioComponent {
     this.apiService.userLogin(email, password)
       .subscribe(
         (res) => {
-          this.authService.logIn(res[Object.keys(res)[1]], res[Object.keys(res)[2]]);
+          this.authService.logIn(res[Object.keys(res)[1]]);
 
           this._snackBar.open(res[Object.keys(res)[0]], "Great!", {
             duration: 5000,

@@ -55,7 +55,7 @@ export class FooterComponent implements OnInit {
 
   onResize() {
     if(window.innerWidth <= 1000) { 
-      this.dialogWidth = 60;
+      this.dialogWidth = 80;
       this.dialogHight = 80;
     } else {
       this.dialogWidth = 35;

@@ -1,7 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(innerWidth <= 1000) ? 'dialog' : 'navigation'"
-      [mode]="(innerWidth <= 1000) ? 'over' : 'side'"
+      [attr.role]="mobileSize() ? 'dialog' : 'navigation'"
+      [mode]="mobileSize() ? 'over' : 'side'"
       [opened]="false">
     <mat-nav-list class="nav-list">
       <a mat-list-item [routerLink]="'/home'" (click)="close()">Acasă</a><br>
@@ -19,23 +19,21 @@
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
-        *ngIf="innerWidth <= 1000">
+        *ngIf="mobileSize()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
 
-      <span class="spacer" *ngIf="innerWidth <= 1000"></span>
+      <span class="spacer" *ngIf="mobileSize()"></span>
 
-      <div *ngIf="innerWidth <= 1000">
+      <div *ngIf="mobileSize()">
         <a mat-button class="logInOrOut" (click)="logInOrLogOutFunc()">{{ logInOrLogOut }}</a>
         <a mat-button class="registerOrUsername" (click)="registerOrUsernameFunc()">{{ registerOrUsername }}</a>          
       </div>
 
-      <span class="spacer" *ngIf="innerWidth <= 1000"></span>
-
-      <a mat-button class="logo-txt" *ngIf="innerWidth <= 1000" [routerLink]="'/home'">MedClyn</a>
+      <a mat-button class="logo-txt" *ngIf="mobileSize()" [routerLink]="'/home'">MedClyn</a>
       <img class="logo" src="https://igorturcan.github.io/medclyn/assets/images/logo.png" (click)="toHome()">
       
-      <div class="hide-on-med" *ngIf="!(innerWidth <= 1000)">
+      <div class="hide-on-med" *ngIf="!mobileSize()">
         <a mat-button [routerLink]="'/home'">MedClyn</a>
         <a mat-button [routerLink]="'/advantages'">Avantaje</a>
         <a mat-button [routerLink]="'/areas'">Domenii</a>
@@ -43,9 +41,9 @@
         <a mat-button [routerLink]="'/technical'">Tehnic</a>
       </div>
 
-      <span class="spacer" *ngIf="!(innerWidth <= 1000)"></span>
+      <span class="spacer" *ngIf="!mobileSize()"></span>
 
-      <div class="hide-on-med" *ngIf="!(innerWidth <= 1000)" >
+      <div class="hide-on-med" *ngIf="!mobileSize()" >
         <a mat-button class="logInOrOut" (click)="logInOrLogOutFunc()">{{ logInOrLogOut }}</a>
         <a mat-button class="registerOrUsername" (click)="registerOrUsernameFunc()">{{ registerOrUsername }}</a>          
       </div>

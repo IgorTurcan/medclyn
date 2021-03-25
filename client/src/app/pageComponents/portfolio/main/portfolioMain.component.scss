@@ -44,3 +44,18 @@
         }
     }
 }
+
+@media screen and (max-width: 900px) and (min-width: 0px)  {
+    .c1, .c2 {
+        .card {
+            max-width: 75%;
+            max-height: 55%;
+            carousel {
+                max-width: 90%;
+            }
+            img {
+                max-width: 70%;
+            }
+        }
+    }
+}
