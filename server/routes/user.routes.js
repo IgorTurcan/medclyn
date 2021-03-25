@@ -4,8 +4,6 @@ import { connectDB, endCon, getCon } from '../db.js'
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import path from 'path';
-import config from 'config';
-import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 const __dirname = path.resolve();
@@ -108,18 +106,11 @@ router.post('/login',
 
         if(!verified) {
             return res.status(400).json({message: 'Wrong password!'});
-        } 
-
-        const token = jwt.sign(
-            { userId: resSelect[0]['id'] },
-            config.get('jwtSecret'),
-            { expiresIn: '1h' }
-        );
+        }
 
         return res.status(200).json({
             message: 'User logged in successfully!',
-            email: user.email,
-            token: token
+            email: user.email
         });
 
     } catch (e) {

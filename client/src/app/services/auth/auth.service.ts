@@ -10,25 +10,22 @@ export class AuthService {
   constructor(private cookieService: CookieService) {
       const dateNow = new Date();
       dateNow.setHours(dateNow.getHours() + 2);
-      if(this.cookieService.get('email') === '' &&
-        this.cookieService.get('token') === '', dateNow) {
+      if(this.cookieService.get('email') === '', dateNow) {
           this.logOut();
         }
     }
 
-  logIn(email: string, token: string) {
+  logIn(email: string) {
     const dateNow = new Date();
     dateNow.setHours(dateNow.getHours() + 2);
-    this.cookieService.set('loggedIn', `${(email != '') && (token != '')}`,dateNow);
+    this.cookieService.set('loggedIn', `${(email != '')}`,dateNow);
     this.cookieService.set('email',`${email}`,dateNow);
-    this.cookieService.set('token',`${token}`,dateNow);
     this.logEvent.emit(true);
   }
 
   logOut() {
     this.cookieService.set('loggedIn', `${false}`);
     this.cookieService.set('email','');
-    this.cookieService.set('token','');
     this.logEvent.emit(false);
   }
 
@@ -38,10 +35,6 @@ export class AuthService {
 
   getEmail() {
     return this.cookieService.get('email');
-  }
-
-  getToken() {
-    return this.cookieService.get('token');
   }
 
   getEvent() {
