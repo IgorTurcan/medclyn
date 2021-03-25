@@ -4,7 +4,6 @@ import { router as userRouter } from './routes/user.routes.js';
 import { router as postRouter } from './routes/post.routes.js';
 import { router as serviceRouter } from './routes/service.routes.js';
 import { connectDB, initDB } from './db.js'
-import fs from 'fs';
 import path from 'path';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
@@ -13,7 +12,7 @@ import cors from 'cors';
 const __dirname = path.resolve();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
 connectDB();
 initDB();
@@ -30,6 +29,6 @@ app.get('/', (req, res) => {
 });
 
 http.createServer(app)
-    .listen(PORT, () => {
-        console.log(`Server listening on the port::${PORT}`);
+    .listen(port, () => {
+        console.log(`Server listening on the port::${port}`);
     });
