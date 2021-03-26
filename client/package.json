@@ -8,7 +8,8 @@
     "test": "ng test",
     "e2e": "ng e2e",
     "build-gh-pages": "ng build --prod --base-href \"https://IgorTurcan.github.io/medclyn/\"",
-    "deploy-gh-pages": "ngh --dir=dist"
+    "deploy-gh-pages": "ngh --dir=dist",
+    "build-gh": "npm run build-gh-pages && npm run deploy-gh-pages"
   },
   "private": true,
   "dependencies": {
@@ -37,7 +38,6 @@
     "angular-responsive-carousel": "^2.0.2",
     "angularx-social-login": "^3.5.4",
     "bootstrap": "^4.6.0",
-    "concurrently": "^6.0.0",
     "dropzone": "^5.8.1",
     "json-server": "^0.16.3",
     "jwt-decode": "^3.1.2",

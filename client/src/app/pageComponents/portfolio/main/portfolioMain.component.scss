@@ -49,13 +49,13 @@
     .c1, .c2 {
         .card {
             margin: auto;
-            max-width: 65%;
-            max-height: 45%;
+            max-width: 65vw;
+            max-height: 45vh;
             carousel {
-                max-width: 90%;
+                max-width: 90vw;
             }
             img {
-                max-width: 70%;
+                max-width: 45vw;
             }
         }
     }
