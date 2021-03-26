@@ -48,8 +48,9 @@
 @media screen and (max-width: 900px) and (min-width: 0px)  {
     .c1, .c2 {
         .card {
-            max-width: 75%;
-            max-height: 55%;
+            margin: auto;
+            max-width: 65%;
+            max-height: 45%;
             carousel {
                 max-width: 90%;
             }
