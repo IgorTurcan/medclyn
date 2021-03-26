@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   selector: 'app-portfolio',
   template: `
     <div class="title">
-      <p class="text">Portofoliu lucrări executate</p>
+      <p class="text">Portofoliu lucrări</p>
     </div>
     <router-outlet></router-outlet>`,
   styleUrls: ['./portfolio.component.scss']
