@@ -6,7 +6,8 @@ import multer from 'multer';
 
 const router = express.Router();
 const __dirname = path.resolve();
-const upload = multer({ dest: `./images/` });
+const uploadDirname = path.join(__dirname,'uploads');
+const upload = multer({ dest: `./uploads/` });
 
 router.get('/add', (req, res) => {
     res.sendFile(path.join(__dirname,'static/addPost.html'));
@@ -27,57 +28,61 @@ router.post('/add',
             endCon();
             return res.status(400).json({message: 'User not logged!'});
         }
-        
+
         const resId = await con.awaitQuery('SELECT id FROM users WHERE email = ?', email, 
             (err) => { if(err) throw(err); }
         );
-
-        const photosPath = path.join(__dirname, 'images', email, title);
 
         const resFind = await con.awaitQuery('SELECT * FROM posts WHERE title = ?', title, 
             (err) => { if(err) throw(err); }
         );
 
         if(resFind.length !== 0) {
-            const dir = path.join(__dirname, 'images');
-            deleteUnusedImages(dir);
             endCon();
+            for(let i = 0; i < req.files.length; i++) {
+                if(fs.existsSync(path.join(uploadDirname,req.files[i].filename))){
+                    fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
+                }
+            }
             return res.status(400).json({message: 'A post with such title exist already!'});
         }
 
-        await con.awaitQuery(`INSERT INTO posts SET ?`, 
-        { id: resId[0].id, title, subtitle, photosPath },
+        let post = {
+            id: resId[0].id, 
+            title: title, 
+            subtitle: subtitle
+        }
+
+        for(let i = 0; i < req.files.length; i++) {
+            const aux = fs.readFileSync(path.join(uploadDirname,req.files[i].filename));
+            post['photo'+i] = aux;
+        }        
+    
+        await con.awaitQuery(`INSERT INTO posts SET ?`, post,
             (err) => { if(err) throw(err); }
         );
 
         endCon();
 
-        if(!fs.existsSync(path.join(__dirname, 'images', email))){
-            fs.mkdirSync(path.join(__dirname, 'images', email));
-        }
-
-        if(!fs.existsSync(photosPath)){
-            fs.mkdirSync(photosPath);
-        }
-
-        for(const file of req.files) {
-            const fileName = file.originalname.slice(0,file.originalname.indexOf('.'))
-            const currentPath = file.path;
-            const destinationPath = path.join(__dirname, 'images', email, title, fileName);
-
-            fs.rename(currentPath, destinationPath, (err) => {
-                if(err) throw(err);
-            });
+        for(let i = 0; i < req.files.length; i++) {
+            fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
         }
         
         return res.status(201).json({message: 'Post added successfully!'});
 
     } catch (e) {
-        const dir = path.join(__dirname, 'images');
-        deleteUnusedImages(dir);
         endCon();
+        for(let i = 0; i < req.files.length; i++) {
+            if(fs.existsSync(path.join(uploadDirname,req.files[i].filename))){
+                fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
+            }
+        }
         return res.status(500).json({message: 'Something went wrong!', error: e});
     }
+});
+
+router.get('/edit', (req, res) => {
+    res.sendFile(path.join(__dirname,'static/editPost.html'));
 });
 
 router.put('/edit',
@@ -107,9 +112,12 @@ router.put('/edit',
         );
 
         if(findPrevious.length === 0) {
-            const dir = path.join(__dirname, 'images');
-            deleteUnusedImages(dir);
             endCon();
+            for(let i = 0; i < req.files.length; i++) {
+                if(fs.existsSync(path.join(uploadDirname,req.files[i].filename))){
+                    fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
+                }
+            }
             return res.status(400).json({message: "That post doesn't exist!"});
         }
 
@@ -118,64 +126,67 @@ router.put('/edit',
         );
 
         if((findNew.length !== 0) && (previousTitle !== newTitle)) {
-            const dir = path.join(__dirname, 'images');
-            deleteUnusedImages(dir);
             endCon();
+            for(let i = 0; i < req.files.length; i++) {
+                if(fs.existsSync(path.join(uploadDirname,req.files[i].filename))){
+                    fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
+                }
+            }
             return res.status(400).json({message: `Post with name ${newTitle} aready exist!`});
         }
 
-        const photosPath = path.join(__dirname, 'images', email, newTitle);
+        let post = {
+            id: resId[0].id, 
+            title: newTitle, 
+            subtitle: subtitle
+        }
+
+        for(let i = 0; i < req.files.length; i++) {
+            const aux = fs.readFileSync(path.join(uploadDirname,req.files[i].filename));
+            post['photo'+i] = aux;
+        }
+
+        for(let i = req.files.length; i < 5; i++) {
+            console.log(i+'<'+5);
+            post['photo'+i] = null;
+        }
 
         await con.awaitQuery(`UPDATE posts 
-        SET title = ?, subtitle = ?, photosPath = ? WHERE postId = ?`, 
-        [ newTitle, subtitle, photosPath, findPrevious[0].postId ], 
+            SET ? WHERE postId = ?`, [post, findPrevious[0].postId], 
             (err) => { if(err) throw(err); }
         );
 
         endCon();
 
-        if(!fs.existsSync(photosPath)) {
-            fs.mkdirSync(photosPath);
-        }
-
-        if(previousTitle !== newTitle) {
-            const dir = path.join(__dirname, 'images', email, previousTitle);
-            fs.rmdir(dir, { recursive: true }, (err) => {
-                if(err) throw(err);
-            });
-        } else {
-            const dir = photosPath;
-            deleteUnusedImages(dir);
-        }
-
-        for(const file of req.files) {
-            const fileName = file.originalname.slice(0,file.originalname.indexOf('.'))
-            const currentPath = file.path;
-            const destinationPath = path.join(__dirname, 'images', email, newTitle, fileName);
-
-            fs.rename(currentPath, destinationPath, (err) => {
-                if(err) throw(err);
-            });
+        for(let i = 0; i < req.files.length; i++) {
+            fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
         }
 
         return res.status(202).json({message: 'Post edited successfully!'});
 
     } catch (e) {
-        const dir = path.join(__dirname, 'images');
-        deleteUnusedImages(dir);
         endCon();
+        for(let i = 0; i < req.files.length; i++) {
+            if(fs.existsSync(path.join(uploadDirname,req.files[i].filename))){
+                fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
+            }
+        }
         return res.status(500).json({message: 'Something went wrong!', error: e});
     }
 });
 
-router.delete('/delete/:email/:title',
+router.get('/delete', (req, res) => {
+    res.sendFile(path.join(__dirname,'static/deletePost.html'));
+});
+
+router.delete('/delete',
     async (req, res) => {
     try {
         connectDB();
         const con = getCon();
 
-        const email = req.params.email;
-        const title = req.params.title;
+        const email = req.body.email;
+        const title = req.body.title;
 
         if(email === undefined) {
             endCon();
@@ -192,8 +203,6 @@ router.delete('/delete/:email/:title',
         );
 
         if(findPost.length === 0) {
-            const dir = path.join(__dirname, 'images');
-            deleteUnusedImages(dir);
             endCon();
             return res.status(400).json({message: "That post doesn't exist!"});
         }
@@ -204,11 +213,6 @@ router.delete('/delete/:email/:title',
 
         endCon();
 
-        const dir = path.join(__dirname, 'images', email, title);
-        fs.rmdir(dir, { recursive: true }, (err) => {
-            if(err) throw(err);
-        });
-
         return res.status(201).json({message: 'Post deleted successfully!'});
 
     } catch (e) {
@@ -217,106 +221,64 @@ router.delete('/delete/:email/:title',
 });
 
 router.get('/get/:email', async (req, res) => {
-    connectDB();
-    const con = getCon();
-    
-    const email = req.params.email;
-    let resPosts = [];
+    try {
+        connectDB();
+        const con = getCon();
+        
+        const email = req.params.email;
+        let posts = [];
 
-    if(email === undefined) {
+        if(email === undefined) {
+            endCon();
+            return res.status(400).json({message: 'User not logged!'});
+        }
+
+        const user = await con.awaitQuery('SELECT * FROM users WHERE email = ?', email, 
+            (err) => { if(err) throw(err); }
+        );
+        
+        posts = await con.awaitQuery('SELECT * FROM posts WHERE id = ?', user[0].id, 
+            (err) => { if(err) throw(err); }
+        );
+
         endCon();
-        return res.status(400).json({message: 'User not logged!'});
-    }
 
-	const user = await con.awaitQuery('SELECT * FROM users WHERE email = ?', email, 
-		(err) => { if(err) throw(err); }
-    );
-    
-    const posts = await con.awaitQuery('SELECT * FROM posts WHERE id = ?', user[0].id, 
-        (err) => { if(err) throw(err); }
-    );
-
-    endCon();
-
-    if(posts.length !== 0) {
-        for(const post of posts) {
-            let fileData = [];
-            const dir = path.join(__dirname,'images', user[0].email, post.title);
-    
-            fs.readdirSync(dir).forEach(file => {
-                const filePath = path.join(dir,file);
-                const data = fs.readFileSync(filePath, {encoding: 'base64'});
-                fileData.push(data);
-            });
-    
-            resPosts.push({
-                userEmail: user.email,
-                title: post.title,
-                subtitle: post.subtitle,
-                paths: fileData
-            });
-        } 
-        return res.json({resPosts});
-    } else {
-        return res.status(204).json({});
+        if(posts.length !== 0) {
+            return res.json({posts});
+        } else {
+            return res.status(204).json({});
+        }
+    } catch (e) {
+        return res.status(500).json({message: 'Something went wrong!', error: e});
     }
 });
 
 router.get('/getAll', async (req, res) => {
-    connectDB();
-    const con = getCon();
+    try {
+        connectDB();
+        const con = getCon();
 
-	let resPosts = [];
+        let posts = [];
 
-	const users = await con.awaitQuery('SELECT * FROM users', [], 
-		(err) => { if(err) throw(err); }
-    );
-    
-    if(users.length !== 0) {
-        for(const user of users) {
-            const posts = await con.awaitQuery('SELECT * FROM posts WHERE id = ?', user.id, 
-                (err) => { if(err) throw(err); }
-            );
-            
-            for(const post of posts) {
-                let fileData = [];
-                const dir = path.join(__dirname,'images', user.email, post.title);
-    
-                fs.readdirSync(dir).forEach(file => {
-                    const filePath = path.join(dir,file);
-                    const data = fs.readFileSync(filePath, {encoding: 'base64'});
-                    fileData.push(data);
-                });
-    
-                resPosts.push({
-                    userEmail: user.email,
-                    title: post.title,
-                    subtitle: post.subtitle,
-                    paths: fileData
-                });
+        const users = await con.awaitQuery('SELECT * FROM users', [], 
+            (err) => { if(err) throw(err); }
+        );
+        
+        if(users.length !== 0) {
+            for(const user of users) {
+                posts = await con.awaitQuery('SELECT * FROM posts WHERE id = ?', user.id, 
+                    (err) => { if(err) throw(err); }
+                );
             }
+            endCon();
+            return res.json({posts});
+        } else {
+            endCon();
+            return res.status(204).json({});
         }
-        endCon();
-        return res.json({resPosts});
-    } else {
-        endCon();
-        return res.status(204).json({});
+    } catch (e) {
+        return res.status(500).json({message: 'Something went wrong!', error: e});
     }
 });
 
 export { router };
-
-function deleteUnusedImages(dir) {
-    fs.readdir(dir, (err, files) => {
-        if(err) throw(err);
-
-        for (const file of files) {
-            const filePath = path.join(dir, file);
-            if(!fs.lstatSync(filePath).isDirectory()) {
-                fs.unlink(filePath, err => {
-                    if(err) throw(err);
-                });
-            } 
-        }
-    });
-}

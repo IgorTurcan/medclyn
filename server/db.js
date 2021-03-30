@@ -10,6 +10,7 @@ function connectDB() {
         "database" : "${process.env.DATABASE}"
     }`));
 
+
     con.on('error', (err) => {
         if(err.code === 'PROTOCOL_CONNECTION_LOST') {
             console.log('Reconnect!')
@@ -32,7 +33,12 @@ function initDB() {
         postId INT(6) AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(35) NOT NULL UNIQUE,
         subtitle VARCHAR(45) NOT NULL,
-        photosPath VARCHAR(255) NOT NULL,
+        photo0 LONGBLOB NOT NULL,
+        photo1 LONGBLOB,
+        photo2 LONGBLOB,
+        photo3 LONGBLOB,
+        photo4 LONGBLOB,
+        photo5 LONGBLOB,
         FOREIGN KEY (id) REFERENCES users(id)
     )`);
     

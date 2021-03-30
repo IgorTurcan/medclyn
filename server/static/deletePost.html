@@ -7,7 +7,9 @@
 </head>
 <body>
     <h1>Delete a post</h1>
-    <form action="/post/delete" method="post">
+    <form action="/post/delete?_method=DELETE" method="post">
+        <label for="email">Email:</label><br>
+        <input type="text" name="email" value="w@w.w"><br>
         <label for="title">Title:</label><br>
         <input type="text" name="title" value="John"><br>
         <input type="submit" value="Submit">
