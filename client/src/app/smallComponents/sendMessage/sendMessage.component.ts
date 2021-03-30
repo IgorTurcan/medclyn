@@ -65,10 +65,6 @@ export class SendMessageComponent {
       }
     );
 
-    this._snackBar.open("Mesajul a fost trimis cu succes!", "OK", {
-      duration: 5000,
-    });
-
     this.dialogRef.close();
   }
 

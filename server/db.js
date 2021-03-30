@@ -4,10 +4,10 @@ let con;
 
 function connectDB() {
     con = mysql.createConnection(JSON.parse(`{
-        "host" : "eu-cdbr-west-03.cleardb.net",
-        "user" : "be6d3aa75fd937",
-        "password" : "0217487c",
-        "database" : "heroku_1b100fc82d59eb9"
+        "host" : "${process.env.HOST}",
+        "user" : "${process.env.USER}",
+        "password" : "${process.env.PASSWORD}",
+        "database" : "${process.env.DATABASE}"
     }`));
 
     con.on('error', (err) => {
