@@ -4,7 +4,7 @@
 👀 I’m interested in programing and especialy web <br>
 🌱 I’m currently learning Angular, MySQL, Node.js and Express <br>
 🏰 Here is my diploma project <br>
-🔧 Created with ❤️ for Medclyn
+🔧 Created with ❤️ for Medclyn <br>
 📫 You can reach me by calling +40751488290 <br>
 😃 Hope you will enjoy it <br>
 
