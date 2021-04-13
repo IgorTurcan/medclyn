@@ -1,23 +1,21 @@
 import express from 'express';
 import { auth } from '../middleware/auth.middleware.js';
+import { uploadFiles } from '../middleware/uploadFiles.middleware.js';
 import { User } from '../models/User.js'
 import { Post } from '../models/Post.js'
+import { Img } from '../models/Img.js'
 import { body, validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
-// import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
-// import multer from 'multer';
 
 const router = express.Router();
 const __dirname = path.resolve();
-// const uploadDirname = path.join(__dirname,'uploads');
-// const upload = multer({ dest: `./uploads/` });
 
 router.get('/add', (req, res) => {
     res.sendFile(path.join(__dirname,'static/addPost.html'));
 });
 
-router.post('/add', auth,
+router.post('/add', uploadFiles, auth, 
     body('email').normalizeEmail().isEmail(),
     body('password').isLength({min:5, max:30}),
     body('title').isLength({min:3, max:35}),
@@ -34,90 +32,41 @@ router.post('/add', auth,
         }
 
         const title = req.body.title;
-        const subtitle = req.body.subtitle;
+        const subtitle = req.body.subtitle;        
 
-        const post = new Post({ title, subtitle });
+        //create images
+        let images = [];
+        for(let i=0; i<req.files.length; i++) {
+            const image = new Img({
+                name: req.files[i].originalname,
+                img: {
+                    data: fs.readFileSync(path.join(__dirname,'uploads',req.files[i].originalname)),
+                    contentType: req.files[i].mimetype
+                }
+            });
+            await image.save();
+            images.push(image);
+        }
+
+        //create post
+        const post = new Post({ title, subtitle, imagesIds: images });
         await post.save();
 
+        //update user
         await User.updateOne(
             { email: req.user.email },
-            { $push : { posts: post } }
+            { $push : { postsIds: post } }
         );
-        
+
+        await cleanUploads();
+
         return res.status(201).json({message: 'Post added successfully!'});
 
     } catch (e) {
+        await cleanUploads();
         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
     }
 });
-
-// router.post('/add',
-//     upload.array('photos',6),
-//     async (req, res) => {
-//     try {
-//         connectDB();
-//         const con = getCon();
-
-//         const email = req.body.email;
-//         const title = req.body.title;
-//         const subtitle = req.body.subtitle;
-
-//         if(email === undefined) {
-//             endCon();
-//             return res.status(400).json({message: 'User not logged!'});
-//         }
-
-//         const resId = await con.awaitQuery('SELECT id FROM users WHERE email = ?', email, 
-//             (err) => { if(err) throw(err); }
-//         );
-
-//         const resFind = await con.awaitQuery('SELECT * FROM posts WHERE title = ?', title, 
-//             (err) => { if(err) throw(err); }
-//         );
-
-//         if(resFind.length !== 0) {
-//             endCon();
-//             for(let i = 0; i < req.files.length; i++) {
-//                 if(fs.existsSync(path.join(uploadDirname,req.files[i].filename))){
-//                     fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
-//                 }
-//             }
-//             return res.status(400).json({message: 'A post with such title exist already!'});
-//         }
-
-//         let post = {
-//             id: resId[0].id, 
-//             title: title, 
-//             subtitle: subtitle
-//         }
-
-//         for(let i = 0; i < req.files.length; i++) {
-//             const aux = fs.readFileSync(path.join(uploadDirname,req.files[i].filename));
-//             post['photo'+i] = aux;
-//         }        
-    
-//         await con.awaitQuery(`INSERT INTO posts SET ?`, post,
-//             (err) => { if(err) throw(err); }
-//         );
-
-//         endCon();
-
-//         for(let i = 0; i < req.files.length; i++) {
-//             fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
-//         }
-        
-//         return res.status(201).json({message: 'Post added successfully!'});
-
-//     } catch (e) {
-//         endCon();
-//         for(let i = 0; i < req.files.length; i++) {
-//             if(fs.existsSync(path.join(uploadDirname,req.files[i].filename))){
-//                 fs.unlinkSync(path.join(uploadDirname,req.files[i].filename));
-//             }
-//         }
-//         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
-//     }
-// });
 
 // router.get('/edit', (req, res) => {
 //     res.sendFile(path.join(__dirname,'static/editPost.html'));
@@ -320,3 +269,15 @@ router.post('/add', auth,
 // });
 
 export { router };
+
+async function cleanUploads() {
+    fs.readdir('./uploads', (err, files) => {
+        if(err) throw err;
+      
+        for (const file of files) {
+            fs.unlink(path.join('./uploads', file), err => {
+                if (err) throw err;
+            });
+        }
+    });
+}

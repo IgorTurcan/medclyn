@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Add a post</h1>
-    <form action="/post/add?_method=POST" method="post">
+    <form action="/post/add" method="POST" enctype="multipart/form-data">
         <label for="email">Email:</label><br>
         <input type="text" name="email" value="John"><br>
         <label for="password">Password:</label><br>
@@ -17,7 +17,7 @@
         <label for="subtitle">Subtitle:</label><br>
         <input type="text" name="subtitle" value="Timisoara"><br><br>
 
-        <!-- <input type="file" name="photos" multiple><br><br> -->
+        <input type="file" name="photos" multiple><br><br>
 
         <input type="submit" value="Submit">
     </form>

@@ -1,5 +1,6 @@
 import { User } from '../models/User.js'
 import { Post } from '../models/Post.js'
+import { Img } from '../models/Img.js'
 import bcrypt from 'bcryptjs';
 
 const auth = async (req, res, next) => {
@@ -23,15 +24,18 @@ const auth = async (req, res, next) => {
 
         req.user = user;
 
-        const users = await User.find();
-        for(const user of users) {
-            console.log('\n'+user.email);
-            for(const postId of user.posts) {
-                const post = await Post.findOne({_id: postId});
-                console.log('>'+post.title);
-            }
-        }
-        // console.log(await Post.find());
+        // const users = await User.find();
+        // for(const user of users) {
+        //     console.log('\n'+user.email);
+        //     for(const postId of user.postsIds) {
+        //         const post = await Post.findOne({_id: postId});
+        //         console.log('  '+post.title);
+        //         for(const imageId of post.imagesIds) {
+        //             const image = await Img.findOne({_id: imageId});
+        //             console.log('    '+image.name);
+        //         }
+        //     }
+        // }
 
         next();
     } catch (e) {
