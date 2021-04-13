@@ -6,9 +6,13 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Delete this user?</h1>
-    <form action="/user/delete" method="post">
-        <input type="submit" value="Yes">
+    <h1>Say us whom to delete</h1>
+    <form action="/user/delete?_method=DELETE" method="post">
+        <label for="email">Email:</label><br>
+        <input type="text" name="email" value="John"><br>
+        <label for="password">Password:</label><br>
+        <input type="text" name="password" value="Doe"><br><br>
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>

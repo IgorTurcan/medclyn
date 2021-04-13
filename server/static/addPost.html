@@ -7,15 +7,17 @@
 </head>
 <body>
     <h1>Add a post</h1>
-    <form action="/post/add" enctype="multipart/form-data" method="post">
+    <form action="/post/add?_method=POST" method="post">
         <label for="email">Email:</label><br>
-        <input type="text" name="email" value="w@w.w"><br>
+        <input type="text" name="email" value="John"><br>
+        <label for="password">Password:</label><br>
+        <input type="text" name="password" value="Doe"><br>
         <label for="title">Title:</label><br>
-        <input type="text" name="title" value="John"><br>
+        <input type="text" name="title" value="post1"><br>
         <label for="subtitle">Subtitle:</label><br>
-        <input type="text" name="subtitle" value="Doe"><br><br>
+        <input type="text" name="subtitle" value="Timisoara"><br><br>
 
-        <input type="file" name="photos" multiple><br><br>
+        <!-- <input type="file" name="photos" multiple><br><br> -->
 
         <input type="submit" value="Submit">
     </form>

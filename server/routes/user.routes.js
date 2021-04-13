@@ -1,6 +1,6 @@
 import express from 'express';
-import fs from 'fs';
-import { connectDB, endCon, getCon } from '../db.js'
+import { auth } from '../middleware/auth.middleware.js';
+import { User } from '../models/User.js'
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import path from 'path';
@@ -13,49 +13,36 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', 
-    body('email').isEmail(),
-    body('password').isLength({min:5}),
+    body('email').normalizeEmail().isEmail(),
+    body('password').isLength({min:5, max:30}),
     async (req, res) => {
     try {
-        connectDB();
-        const con = getCon();
-
-        const errors = validationResult(req.body);
+        const errors = validationResult(req);
 
         if(!errors.isEmpty()) {
-            endCon();
             return res.status(400).json({
                 errors: errors.array(),
                 message: 'Wrong data on register!'
             });
         }
 
-        const user = { 
-            email: req.body.email, 
-            password: req.body.password 
-        };
+        const email = req.body.email;
+        const password = req.body.password;
 
-        user.password = await bcrypt.hash(user.password, 12);
+        const candidate = await User.findOne({ email });
 
-        const resFind = await con.awaitQuery('SELECT * FROM users WHERE email = ?', user.email, 
-            (err) => { if(err) throw(err); }
-        );
-
-        if(resFind.length !== 0) {
-            endCon();
-            return res.status(400).json({message: 'This email already exists!'});
+        if(candidate) {
+            return res.status(400).json({message: 'This user already exists!'});
         }
-        
-        await con.awaitQuery('INSERT INTO users SET ?', user, 
-            (err) => { if(err) throw(err); } 
-        );
 
-        endCon();
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const user = new User({ email, password: hashedPassword });
+        await user.save();
+        
         return res.status(201).json({message: 'User registered successfully!'});
 
     } catch (e) {
-        endCon();
-        return res.status(500).json({message: 'Something went wrong!', error: e});
+        return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
     }
 });
 
@@ -63,99 +50,57 @@ router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname,'static/login.html'));
 });
 
-router.post('/login', 
+router.post('/login', auth,
     body('email').normalizeEmail().isEmail(),
-    body('password').isLength({min:6}),
+    body('password').isLength({min:5, max:30}),
     async (req, res) => {
     try {
-        connectDB();
-        const con = getCon();
-
         const errors = validationResult(req);
 
         if(!errors.isEmpty()) {
-            endCon();
+            return res.status(400).json({
+                errors: errors.array(),
+                message: 'Wrong data on register!', 
+                auth: 'false'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'User logged in successfully!',
+            auth: 'true'
+        });
+
+    } catch (e) {
+        return res.status(500).json({message: 'Something went wrong!', auth: 'false', error: `${e}`});
+    }
+});
+
+router.get('/delete', (req, res) => {
+    res.sendFile(path.join(__dirname,'static/deleteUser.html'));
+});
+
+router.delete('/delete', auth,
+    body('email').normalizeEmail().isEmail(),
+    body('password').isLength({min:5, max:30}),
+    async (req, res) => {
+    try {
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()) {
             return res.status(400).json({
                 errors: errors.array(),
                 message: 'Wrong data on register!'
             });
         }
 
-        const user = { 
-            email: req.body.email, 
-            password: req.body.password 
-        };
+        const email = req.body.email;
 
-        const resFind = await con.awaitQuery('SELECT * FROM users WHERE email = ?', user.email, 
-            (err) => { if(err) throw(err); }
-        );
-
-        if(resFind.length === 0) {
-            endCon();
-            return res.status(400).json({message: "This email doesn't exists!"});
-        }
-
-        const resSelect = await con.awaitQuery('SELECT password FROM users WHERE email = ?', user.email, 
-            (err) => { if(err) throw(err); }
-        );
-
-        endCon();
-
-        const password_hash = resSelect[0]['password'];
-        const verified = await bcrypt.compareSync(user.password, password_hash);
-
-        if(!verified) {
-            return res.status(400).json({message: 'Wrong password!'});
-        }
-
-        return res.status(200).json({
-            message: 'User logged in successfully!',
-            email: user.email
-        });
-
-    } catch (e) {
-        endCon();
-        return res.status(500).json({message: 'Something went wrong!', error: e});
-    }
-});
-
-router.delete('/delete/:email',
-    async (req, res) => {
-    try {
-        connectDB();
-        const con = getCon();
-
-        const email = req.params.email;
-
-        if(email === undefined) {
-            endCon();
-            return res.status(400).json({message: 'User not logged!'});
-        }
-
-        const resId = await con.awaitQuery('SELECT id FROM users WHERE email = ?', email, 
-            (err) => { if(err) throw(err); }
-        );
-
-        await con.awaitQuery('DELETE FROM posts WHERE id = ?', resId[0].id, 
-            (err) => { if(err) throw(err); }
-        );
-
-        await con.awaitQuery('DELETE FROM users WHERE email = ?', email, 
-            (err) => { if(err) throw(err); }
-        );
-
-        endCon();
-
-        const dir = path.join(__dirname, 'images', email);
-        fs.rmdirSync(dir, { recursive: true }, (err) => {
-            if(err) throw(err);
-        });
+        await User.findOneAndDelete({ email });
 
         return res.status(201).json({message: 'User and his data deleted successfully!'});
 
     } catch (e) {
-        endCon();
-        return res.status(500).json({message: 'Something went wrong!', error: e});
+        return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
     }
 });
 
