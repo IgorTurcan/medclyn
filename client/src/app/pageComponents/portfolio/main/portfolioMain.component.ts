@@ -37,20 +37,21 @@ export class PortfolioMainComponent implements OnInit {
 		.subscribe(
 			(res) => {
         if(res != null) {
-          for(const post of res[Object.keys(res)[0]]) {
-            let pathArray = [];
-            let imageArray = [];
-            const dataFormat = 'data:image/png;base64,';
+          console.log(res);
+          // for(const post of res[Object.keys(res)[0]]) {
+          //   let pathArray = [];
+          //   let imageArray = [];
+          //   const dataFormat = 'data:image/png;base64,';
   
-            for(const path of post.paths) {
-              pathArray.push(dataFormat+path);
-              imageArray.push({ image: dataFormat+path });
-            }
+          //   for(const path of post.paths) {
+          //     pathArray.push(dataFormat+path);
+          //     imageArray.push({ image: dataFormat+path });
+          //   }
   
-            this.portfolioCards.push(new portfolioCard(
-              post.title, post.subtitle, pathArray, imageArray
-            ));
-          } 
+          //   this.portfolioCards.push(new portfolioCard(
+          //     post.title, post.subtitle, pathArray, imageArray
+          //   ));
+          // } 
         } else {
           this._snackBar.open('No post found!', "OK", {
             duration: 5000,

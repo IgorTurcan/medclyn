@@ -240,6 +240,28 @@ router.post('/add', uploadFiles, auth,
 //     }
 // });
 
+router.get('/getAll', async (req, res) => {
+    try {
+        const posts = await Post.find();
+        
+        if(posts.length!==0) {
+            for(let i=0; i<posts.length; i++) {
+                for(const imageId of posts[i].imagesIds) {
+                    const image = await Img.findOne({_id: imageId});
+                    posts[i].imageData = image.img.data.buffer;
+                    posts[i].imageType = image.contentType;
+                    // console.table(posts[i]);
+                }
+            }
+            return res.json({posts});
+        } else {
+            return res.status(204).json({message: 'No posts found!'});
+        }
+    } catch (e) {
+        return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
+    }
+});
+
 // router.get('/getAll', async (req, res) => {
 //     try {
 //         connectDB();

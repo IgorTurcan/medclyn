@@ -7,7 +7,8 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private SERVER_URL = "https://medclyn-back.herokuapp.com";
+  //private SERVER_URL = "https://medclyn-back.herokuapp.com";
+  private SERVER_URL = "http://localhost:5000";
 
   constructor(private httpClient: HttpClient) { }
 
