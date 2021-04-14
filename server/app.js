@@ -24,7 +24,7 @@ app.use('/post', postRouter);
 async function start() {
     try {
         await mongoose.connect(
-            '---',{
+            'mongodb+srv://igor:266NFr5OjyFczr22@cluster0.cghzv.mongodb.net/app?retryWrites=true&w=majority',{
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
                 useCreateIndex: true

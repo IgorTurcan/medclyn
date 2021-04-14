@@ -242,18 +242,27 @@ router.post('/add', uploadFiles, auth,
 
 router.get('/getAll', async (req, res) => {
     try {
-        const posts = await Post.find();
-        
+        let postObjs = [];
+        let posts = await Post.find();
+
         if(posts.length!==0) {
-            for(let i=0; i<posts.length; i++) {
-                for(const imageId of posts[i].imagesIds) {
+            for(const post of posts) {
+                let postObj = {
+                    title: post.title,
+                    subtitle: post.subtitle,
+                    images: []
+                };
+                for(const imageId of post.imagesIds) {
                     const image = await Img.findOne({_id: imageId});
-                    posts[i].imageData = image.img.data.buffer;
-                    posts[i].imageType = image.contentType;
-                    // console.table(posts[i]);
+                    postObj.images.push({
+                        data: image.img.data, 
+                        type: image.img.contentType
+                    });
                 }
+                postObjs.push(postObj);
             }
-            return res.json({posts});
+
+            return res.json({postObjs});
         } else {
             return res.status(204).json({message: 'No posts found!'});
         }
