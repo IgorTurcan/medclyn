@@ -207,38 +207,44 @@ router.post('/add', uploadFiles, auth,
 //     }
 // });
 
-// router.get('/get/:email', async (req, res) => {
-//     try {
-//         connectDB();
-//         const con = getCon();
+router.get('/get/:email', async (req, res) => {
+    try {
+        const email = req.params.email;
+
+        if(email === undefined) {
+            return res.status(400).json({message: 'User not logged!'});
+        }
+
+        let postObjs = [];
+
+        let user = await User.findOne({ email });
+
+        for(const postId of user.postsIds) {
+            const post = await Post.findOne({ _id: postId });
+            let postObj = {
+                title: post.title,
+                subtitle: post.subtitle,
+                images: []
+            };
+            for(const imageId of post.imagesIds) {
+                const image = await Img.findOne({_id: imageId});
+                postObj.images.push({
+                    data: image.img.data, 
+                    type: image.img.contentType
+                });
+            }
+            postObjs.push(postObj);
+        }
         
-//         const email = req.params.email;
-//         let posts = [];
-
-//         if(email === undefined) {
-//             endCon();
-//             return res.status(400).json({message: 'User not logged!'});
-//         }
-
-//         const user = await con.awaitQuery('SELECT * FROM users WHERE email = ?', email, 
-//             (err) => { if(err) throw(err); }
-//         );
-        
-//         posts = await con.awaitQuery('SELECT * FROM posts WHERE id = ?', user[0].id, 
-//             (err) => { if(err) throw(err); }
-//         );
-
-//         endCon();
-
-//         if(posts.length !== 0) {
-//             return res.json({posts});
-//         } else {
-//             return res.status(204).json({});
-//         }
-//     } catch (e) {
-//         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
-//     }
-// });
+        if(postObjs.length !== 0) {
+            return res.json({postObjs});
+        } else {
+            return res.status(204).json({});
+        }
+    } catch (e) {
+        return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
+    }
+});
 
 router.get('/getAll', async (req, res) => {
     try {
@@ -270,34 +276,6 @@ router.get('/getAll', async (req, res) => {
         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
     }
 });
-
-// router.get('/getAll', async (req, res) => {
-//     try {
-//         connectDB();
-//         const con = getCon();
-
-//         let posts = [];
-
-//         const users = await con.awaitQuery('SELECT * FROM users', [], 
-//             (err) => { if(err) throw(err); }
-//         );
-        
-//         if(users.length !== 0) {
-//             for(const user of users) {
-//                 posts = await con.awaitQuery('SELECT * FROM posts WHERE id = ?', user.id, 
-//                     (err) => { if(err) throw(err); }
-//                 );
-//             }
-//             endCon();
-//             return res.json({posts});
-//         } else {
-//             endCon();
-//             return res.status(204).json({});
-//         }
-//     } catch (e) {
-//         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
-//     }
-// });
 
 export { router };
 

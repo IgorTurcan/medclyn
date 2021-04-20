@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Title } from '@angular/platform-browser';
+import { DomSanitizer, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AddItemPortfolioComponent } from '../../items/addItem/addItemPortfolio.component';
@@ -44,12 +44,13 @@ export class PortfolioEditUserComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private _snackBar: MatSnackBar,
-    public dialog: MatDialog) { 
+    public dialog: MatDialog,
+		private sanitizer: DomSanitizer) { 
     this.titleService.setTitle("Postările tale");
   }
 
   ngOnInit() {
-    this.getPosts();
+    this.setPosts();
   }
 
   changeState() {
@@ -70,7 +71,7 @@ export class PortfolioEditUserComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe( () => {
-      this.getPosts();
+      this.setPosts();
     });
   }
 
@@ -82,7 +83,7 @@ export class PortfolioEditUserComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe( () => {
-      this.getPosts();
+      this.setPosts();
     });
   }
 
@@ -139,45 +140,53 @@ export class PortfolioEditUserComponent implements OnInit {
     }
   }
 
-  getPosts() {
-    const cards = [];
+  setPosts() {
     const email = this.authService.getEmail();
     this.apiService.postsGet(email)
-		.subscribe(
-			(res) => {
-        if(res != null) {
-          for(const post of res[Object.keys(res)[0]]) {
-            let pathArray = [];
-            let imageArray = [];
-            const dataFormat = 'data:image/png;base64,';
-  
-            for(const path of post.paths) {
-              pathArray.push(dataFormat+path);
-              imageArray.push({ image: dataFormat+path });
+      .subscribe(
+        (res) => {
+          if(res != null) {
+            for(const post of res[Object.keys(res)[0]]) {
+              let pathArray = [];
+              let imageArray = [];
+              for(const image of post[Object.keys(post)[2]]){
+                const dataFormat = 'data:'+image[Object.keys(image)[1]]+';base64,';
+                const imageData = this.sanitize(dataFormat+this._arrayBufferToBase64(image.data.data));
+                pathArray.push(imageData['changingThisBreaksApplicationSecurity']);
+                imageArray.push({image: imageData['changingThisBreaksApplicationSecurity']});
+              }
+              this.portfolioCards.push(new portfolioCard(
+                post[Object.keys(post)[0]], post[Object.keys(post)[1]], pathArray, imageArray
+              ));
             }
-  
-            cards.push(new portfolioCard(
-              post.title, post.subtitle, pathArray, imageArray
-            ));
+          } else {
+            this._snackBar.open('No post found!', "OK", {
+              duration: 5000,
+            });
           }
-        } else {
-          this._snackBar.open('No post found!', "OK", {
+        }, 
+        (err) => {
+          this._snackBar.open(err.error.message, "OK", {
             duration: 5000,
           });
         }
-			}, 
-      (err) => {
-        this._snackBar.open(err.error.message, "OK", {
-          duration: 5000,
-        });
-      },
-      () => {
-        this.portfolioCards = cards;
-      }
-    ); 
+      ); 
 
   }
 
   @HostListener('window:resize') handle() { this.onResize(); }
+	
+  _arrayBufferToBase64(buffer) {
+		let binary = '';
+		let bytes = new Uint8Array(buffer);
+		let len = bytes.byteLength;
+		for (let i = 0; i < len; i++) {
+			binary += String.fromCharCode(bytes[i]);
+		}
+		return window.btoa(binary);
+	}
 
+	sanitize(url:string) {
+		return this.sanitizer.bypassSecurityTrustUrl(url);
+	}
 }

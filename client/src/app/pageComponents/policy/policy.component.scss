@@ -2,7 +2,7 @@
     background-color: #0085CC;
     color: #ffffff;
     text-align: center;
-    padding: 15% 0 1% 0;
+    padding: 5% 0 1% 0;
     height: 25vh;
     .text {
         font-size: 290%;
@@ -28,7 +28,7 @@
     }
 }
 
-@media screen and (max-width: 800px) and (min-width: 500px)  {
+@media screen and (max-width: 1000px) and (min-width: 500px)  {
     .title {
         height: 35vh;
         padding-top: 20%;

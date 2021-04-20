@@ -52,11 +52,17 @@ export class SignInPortfolioComponent {
     this.apiService.userLogin(email, password)
       .subscribe(
         (res) => {
-          this.authService.logIn(res[Object.keys(res)[1]]);
+          if(res['auth']) {
+            this.authService.logIn(email);
 
-          this._snackBar.open(res[Object.keys(res)[0]], "Great!", {
-            duration: 5000,
-          });
+            this._snackBar.open(res[Object.keys(res)[0]], "Great!", {
+              duration: 5000,
+            });  
+          } else if(!res['auth']) {
+            this._snackBar.open("Authentication failed!", "OK!", {
+              duration: 5000,
+            });  
+          }
         },
         (err) => {
           this._snackBar.open(err.error.message, "OK", {

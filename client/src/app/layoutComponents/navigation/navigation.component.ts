@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SignInPortfolioComponent } from 'src/app/smallComponents/accountDialogs/signIn/signInPortfolio.component';
@@ -26,13 +27,14 @@ export class NavigationComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public dialog: MatDialog,
+    public dialog: MatDialog, 
+    private _snackBar: MatSnackBar,
     private authService: AuthService) {
-    router.events.forEach((event) => {
-      if(event instanceof NavigationEnd) {
-        this.top.nativeElement.scrollIntoView();
-      }
-    });
+      router.events.forEach((event) => {
+        if(event instanceof NavigationEnd) {
+          this.top.nativeElement.scrollIntoView();
+        }
+      });
   }
 
   ngOnInit() {
@@ -55,6 +57,12 @@ export class NavigationComponent implements OnInit {
   logInOrLogOutFunc() { 
     if(this.authService.isAuthenticated()) {
       this.authService.logOut();
+      if(this.router.url === '/portfolio/edit/user') {
+        this.router.navigate(['/portfolio']);
+      }
+      this._snackBar.open("User logged out successful!", "OK!", {
+        duration: 5000,
+      }); 
     } else {
       let dialogRef = this.dialog.open(SignInPortfolioComponent, {
         width: `${this.dialogWidth}`,
