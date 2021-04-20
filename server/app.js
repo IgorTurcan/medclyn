@@ -3,7 +3,7 @@ import http from 'http';
 import mongoose from 'mongoose'; 
 import { router as userRouter } from './routes/user.routes.js';
 import { router as postRouter } from './routes/post.routes.js';
-// import { router as serviceRouter } from './routes/service.routes.js';
+import { router as serviceRouter } from './routes/service.routes.js';
 import path from 'path';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
@@ -19,12 +19,12 @@ app.use(methodOverride('_method'));
 app.use(cors());
 app.use('/user', userRouter);
 app.use('/post', postRouter);
-// app.use('/service', serviceRouter);
+app.use('/service', serviceRouter);
 
 async function start() {
     try {
         await mongoose.connect(
-            '----',{
+            'url',{
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
                 useCreateIndex: true
