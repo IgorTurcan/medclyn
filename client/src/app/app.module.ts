@@ -2,15 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { LayoutModule } from '@angular/cdk/layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
-import { MatFileUploadModule } from 'angular-material-fileupload';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -58,8 +53,6 @@ import { BackFloatingButtonComponent } from './pageComponents/portfolio/edit/use
 import { BottomSheetComponent } from './pageComponents/home/bottomSheet/bottomSheet.component';
 import { EditItemPortfolioComponent } from './pageComponents/portfolio/items/editItem/editItemPortfolio.component';
 import { AddItemPortfolioComponent } from './pageComponents/portfolio/items/addItem/addItemPortfolio.component';
-import { GoogleAuthButtonComponent } from './smallComponents/google-auth-button/google-auth-button.component';
-import { FacebookAuthButtonComponent } from './smallComponents/facebook-auth-button/facebook-auth-button.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SignInPortfolioComponent } from './smallComponents/accountDialogs/signIn/signInPortfolio.component';
 import { SignUpPortfolioComponent } from './smallComponents/accountDialogs/signUp/signUpPortfolio.component';
@@ -92,8 +85,6 @@ import { ApiService } from './services/api.service';
     AddItemPortfolioComponent,
     SignInPortfolioComponent,
     SignUpPortfolioComponent,
-    GoogleAuthButtonComponent,
-    FacebookAuthButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -112,7 +103,6 @@ import { ApiService } from './services/api.service';
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
-    LayoutModule,
     MatMenuModule,
     MatTableModule,
     MatPaginatorModule,
@@ -126,33 +116,13 @@ import { ApiService } from './services/api.service';
     IvyCarouselModule,
     NgImageFullscreenViewModule,
     MatChipsModule,
-    SocialLoginModule,
     HttpClientModule,
-    MatBadgeModule,
-    MatFileUploadModule 
+    MatBadgeModule
   ],
   providers: [
     ApiService,
     AuthGuard,
     CookieService
-    // ,{
-    //   provide: 'SocialAuthServiceConfig',
-    //   useValue: {
-    //     autoLogin: false,
-    //     providers: [
-    //       {
-    //         id: GoogleLoginProvider.PROVIDER_ID,
-    //         provider: new GoogleLoginProvider(
-    //           '955186114298-1cfdbu5kaioqv9h1dd0unte6lf2r9cii'
-    //         )
-    //       },
-    //       {
-    //         id: FacebookLoginProvider.PROVIDER_ID,
-    //         provider: new FacebookLoginProvider('367249327652188')
-    //       }
-    //     ]
-    //   } as SocialAuthServiceConfig,
-    // }
   ],
   bootstrap: [AppComponent]
 })
