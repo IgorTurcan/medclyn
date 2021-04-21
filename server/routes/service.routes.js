@@ -12,8 +12,8 @@ router.post('/sendEmail',
         const message = req.body.message;
 
         const user = {
-            email: 'email',
-            pass: 'pass'
+            email: process.env.EMAIL || '',
+            pass: process.env.PASS || ''
         }
 
         const transporter = nodemailer.createTransport({
