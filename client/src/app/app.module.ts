@@ -32,6 +32,7 @@ import { IvyCarouselModule } from 'angular-responsive-carousel';
 import { NgImageFullscreenViewModule } from 'ng-image-fullscreen-view';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
  
 import { AdvantagesComponent } from './pageComponents/advantages/advantages.component';
 import { AreasComponent } from './pageComponents/areas/areas.component';
@@ -117,7 +118,8 @@ import { ApiService } from './services/api.service';
     NgImageFullscreenViewModule,
     MatChipsModule,
     HttpClientModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     ApiService,

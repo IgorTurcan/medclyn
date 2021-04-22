@@ -139,6 +139,10 @@ export class PortfolioEditUserComponent implements OnInit {
 		}
 	}
 
+	haveAnyPost(): boolean {
+		return this.portfolioCards.length === 0;
+	}
+	
 	setPosts() {
 		const email = this.authService.getEmail();
 		this.apiService.postsGet(email)

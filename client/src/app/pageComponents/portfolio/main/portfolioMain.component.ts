@@ -78,6 +78,10 @@ export class PortfolioMainComponent implements OnInit {
 		}
 	}
 
+	haveAnyPost(): boolean {
+		return this.portfolioCards.length === 0;
+	}
+
 	onResize() {
 		this.innerWidth = window.innerWidth;
 		if(window.innerWidth <= 800) { 
