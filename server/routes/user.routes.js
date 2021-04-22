@@ -93,7 +93,16 @@ router.delete('/delete', auth,
             });
         }
 
-        const email = req.body.email;
+        // const email = req.body.email;
+
+        // for(const postId of req.user.postsIds) {
+        //     const post = await Post.findOne({_id: postId});
+        //     console.log('  '+post.title);
+        //     for(const imageId of post.imagesIds) {
+        //         const image = await Img.findOne({_id: imageId});
+        //         console.log('    '+image.name);
+        //     }
+        // }
 
         await User.findOneAndDelete({ email });
 

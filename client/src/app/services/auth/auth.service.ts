@@ -37,6 +37,10 @@ export class AuthService {
     return this.cookieService.get('email');
   }
 
+  getPass() {
+    return this.cookieService.get('pass');
+  }
+
   getEvent() {
     return this.logEvent;
   }

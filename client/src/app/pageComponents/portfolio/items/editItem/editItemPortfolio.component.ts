@@ -97,8 +97,7 @@ export class EditItemPortfolioComponent implements OnInit {
     const newTitle = this.Data.get('cardNewTitle').value;
     const subtitle = this.Data.get('cardSubtitle').value;
 
-    const email = this.authService.getEmail();
-    this.apiService.postEdit(email, oldTitle, newTitle, subtitle, this.images)
+    this.apiService.postEdit(oldTitle, newTitle, subtitle, this.images)
 		.subscribe(
       (res) => {
         this._snackBar.open(res[Object.keys(res)[0]], "Great!", {
