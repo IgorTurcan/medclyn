@@ -9,7 +9,7 @@
     "e2e": "ng e2e",
     "build-gh-pages": "ng build --prod --base-href \"https://IgorTurcan.github.io/medclyn/\"",
     "deploy-gh-pages": "ngh --dir=dist",
-    "build-gh": "npm run build-gh-pages && npm run deploy-gh-pages"
+    "gh-pages": "npm run build-gh-pages && npm run deploy-gh-pages"
   },
   "private": true,
   "dependencies": {

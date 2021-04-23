@@ -31,6 +31,7 @@ import { portfolioCard } from '../../portfolioCard.model';
 
 export class PortfolioEditUserComponent implements OnInit {
 	portfolioCards = [];
+	haveAnyPost: boolean = true;
 
 	state: string = 'blue';
 
@@ -70,9 +71,9 @@ export class PortfolioEditUserComponent implements OnInit {
 			data: { }
 		});
 
-		dialogRef.afterClosed().subscribe( () => {
-			this.setPosts();
-		});
+		// dialogRef.afterClosed().subscribe( () => {
+		// 	this.setPosts();
+		// });
 	}
 
 	goEdit(index: number) {
@@ -82,9 +83,9 @@ export class PortfolioEditUserComponent implements OnInit {
 			data: { portfolioCard: this.portfolioCards[index] }
 		});
 
-		dialogRef.afterClosed().subscribe( () => {
-			this.setPosts();
-		});
+		// dialogRef.afterClosed().subscribe( () => {
+		// 	this.setPosts();
+		// });
 	}
 
 	delete(index: number, title: string) {
@@ -98,16 +99,22 @@ export class PortfolioEditUserComponent implements OnInit {
 				this.portfolioCards.splice(index, 1);
 			},
 			(err) => {
-				this._snackBar.open(err.error.message, "OK", {
-					duration: 5000,
-				});
+				if(err.status === 0) {
+					this._snackBar.open("No internet or no server", "OK", {
+						duration: 5000,
+					});
+				} else {
+					this._snackBar.open(err.message, "OK", {
+						duration: 5000,
+					});	
+				}
 			}
 		);
 	}
 
 	deleteAccount() {
 		let res = confirm("You are sure you want to delete this account?");
-		if (res) {
+		if(res) {
 			const email = this.authService.getEmail();
 			this.apiService.userDelete(email)
 			.subscribe(
@@ -120,9 +127,15 @@ export class PortfolioEditUserComponent implements OnInit {
 					this.router.navigate(['/portfolio']);
 				},
 				(err) => {
-					this._snackBar.open(err.error.message, "OK", {
-						duration: 5000,
-					});
+					if(err.status === 0) {
+						this._snackBar.open("No internet or no server", "OK", {
+							duration: 5000,
+						});
+					} else {
+						this._snackBar.open(err.message, "OK", {
+							duration: 5000,
+						});	
+					}
 				}
 			);
 		}
@@ -138,17 +151,14 @@ export class PortfolioEditUserComponent implements OnInit {
 			this.dialogHight = 75;
 		}
 	}
-
-	haveAnyPost(): boolean {
-		return this.portfolioCards.length === 0;
-	}
 	
 	setPosts() {
 		const email = this.authService.getEmail();
 		this.apiService.postsGet(email)
 			.subscribe(
 				(res) => {
-					if(res != null) {
+					if(res) {
+						this.haveAnyPost = true;
 						for(const post of res[Object.keys(res)[0]]) {
 							let pathArray = [];
 							let imageArray = [];
@@ -162,16 +172,25 @@ export class PortfolioEditUserComponent implements OnInit {
 								post[Object.keys(post)[0]], post[Object.keys(post)[1]], pathArray, imageArray
 							));
 						}
+						this.haveAnyPost = false;
 					} else {
+						this.haveAnyPost = false;
 						this._snackBar.open('No post found!', "OK", {
 							duration: 5000,
 						});
 					}
 				}, 
 				(err) => {
-					this._snackBar.open(err.error.message, "OK", {
-						duration: 5000,
-					});
+					this.haveAnyPost = false;
+					if(err.status === 0) {
+						this._snackBar.open("No internet or no server", "OK", {
+							duration: 5000,
+						});
+					} else {
+						this._snackBar.open(err.message, "OK", {
+							duration: 5000,
+						});	
+					}
 				}
 			); 
 

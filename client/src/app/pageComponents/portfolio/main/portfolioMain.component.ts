@@ -16,8 +16,8 @@ import { portfolioCard } from '../portfolioCard.model';
 })
 
 export class PortfolioMainComponent implements OnInit {
-
 	portfolioCards = [];
+	haveAnyPost: boolean = true;
 
 	dialogWidth: number;
 	dialogHight: number;
@@ -38,7 +38,8 @@ export class PortfolioMainComponent implements OnInit {
 		this.apiService.postsGetAll()
 			.subscribe(
 				(res) => {
-					if(res != null) {
+					if(res) {
+						this.haveAnyPost = true;
 						for(const post of res[Object.keys(res)[0]]) {
 							let pathArray = [];
 							let imageArray = [];
@@ -51,17 +52,26 @@ export class PortfolioMainComponent implements OnInit {
 							this.portfolioCards.push(new portfolioCard(
 								post[Object.keys(post)[0]], post[Object.keys(post)[1]], pathArray, imageArray
 							));
-						}	
+						}
+						this.haveAnyPost = false;
 					} else {
+						this.haveAnyPost = false;
 						this._snackBar.open('No post found!', "OK", {
 						  duration: 5000,
 						});
 					}
 				}, 
 				(err) => {
-					this._snackBar.open(err.error.message, "OK", {
-						duration: 5000,
-					});
+					this.haveAnyPost = false;
+					if(err.status === 0) {
+						this._snackBar.open("No internet or no server", "OK", {
+							duration: 5000,
+						});
+					} else {
+						this._snackBar.open(err.message, "OK", {
+							duration: 5000,
+						});	
+					}
 				}
 			);    
 	}
@@ -76,10 +86,6 @@ export class PortfolioMainComponent implements OnInit {
 			data: { }
 			});
 		}
-	}
-
-	haveAnyPost(): boolean {
-		return this.portfolioCards.length === 0;
 	}
 
 	onResize() {

@@ -1,41 +1,41 @@
 * {
-    color: #0077b6;
+	color: #0077b6;
 }
-    
+	
 form {
-    text-align: center;
+	text-align: center;
 }
 
 .input {
-    width: 100%;
+	width: 100%;
 }
-    
+	
 .textarea {
-    width: 100%;
+	width: 100%;
 }
 
 .action {
-    justify-content: center;
+	justify-content: center;
 }
-    
+	
 .text-danger {
-    color: #E34141;
+	color: #E34141;
 }
 
 label {
-    margin-top: 15%;
+	margin-top: 15%;
 }
 
 .password, .repeatPassword {
-    width: 95%; 
+	width: 95%; 
 }
 
 mat-icon {
-    cursor: pointer;
+	cursor: pointer;
 }
 
-@media screen and (max-width: 800px) and (min-width: 500px)  {
-    .password, .repeatPassword {
-        width: 90%; 
-    }
+@media screen and (max-width: 1000px) and (min-width: 0px)  {
+	.password, .repeatPassword {
+		width: 90%; 
+	}
 }

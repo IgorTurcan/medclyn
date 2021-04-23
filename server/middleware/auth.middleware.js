@@ -23,33 +23,11 @@ const auth = async (req, res, next) => {
         }
 
         req.user = user;
-
-        // const users = await User.find();
-        // for(const user of users) {
-        //     console.log('\n'+user.email);
-        //     for(const postId of user.postsIds) {
-        //         const post = await Post.findOne({_id: postId});
-        //         console.log('  '+post.title);
-        //         for(const imageId of post.imagesIds) {
-        //             const image = await Img.findOne({_id: imageId});
-        //             console.log('    '+image.name);
-        //         }
-        //     }
-        // }
-
+        
         next();
     } catch (e) {
         return res.status(400).json({message: "Something went wrong!", auth: 'false', error: `${e}`});
     }
-    
 }
 
 export { auth };
-
-/*
-
-
-
-60757ee3991f94097804f877
-6076e4e56acc840ce484c442
-*/

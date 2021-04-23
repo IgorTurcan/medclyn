@@ -88,7 +88,7 @@ router.put('/edit', uploadFiles,
         const newTitle = req.body.newTitle;
         const subtitle = req.body.subtitle;
 
-        const post = await Post.find({ title: previousTitle });
+        const post = await Post.findOne({ title: previousTitle });
         if(post){
             //Delte post's images
             for(const imageId of post.imagesIds) {
@@ -96,7 +96,7 @@ router.put('/edit', uploadFiles,
             }
 
             //Add new images
-            let images = [];
+            let imagesIds = [];
             for(let i=0; i<req.files.length; i++) {
                 const image = new Img({
                     name: req.files[i].originalname,
@@ -106,13 +106,16 @@ router.put('/edit', uploadFiles,
                     }
                 });
                 await image.save();
-                images.push(image);
+                imagesIds.push(image['_id']);
             }
 
             //update post
-            await post.updateOne(
-                { $pull : { imagesIds: images }, $set : { title: newTitle, subtitle: subtitle } }
+            await Post.updateOne(
+                { title: previousTitle }, 
+                { $set : { title: newTitle, subtitle: subtitle, imagesIds: imagesIds } }
             );
+        } else {
+            return res.status(400).json({message: 'No such post!'});
         }
 
         await cleanUploads();
@@ -133,51 +136,72 @@ router.delete('/delete/:email/:title',
         const email = req.params.email;
         const title = req.params.title;
 
-            const post = await Post.findOne({ title });
-            if(post){
-                //delete all images
-                for(const imageId of post.imagesIds) {
-                    await Img.findOneAndDelete({_id: imageId});
-                }
-                //update user
-                await User.updateOne(
-                    { email: email },
-                    { $pull : { postsIds: post._id } }
-                );
-                //delete post
-                await Post.findOneAndDelete({ title });
-                return res.status(201).json({message: 'Post deleted successfully!'});
-            } else {
-                return res.status(201).json({message: "No such user's post found!"});
+        if(!email) {
+            return res.status(400).json({message: 'No such user!'});
+        } else if(!title) {
+            return res.status(400).json({message: 'No such title!'});
+        }
+
+        const post = await Post.findOne({ title });
+
+        if(post){
+            //delete all images
+            for(const imageId of post.imagesIds) {
+                await Img.findOneAndDelete({_id: imageId});
             }
+            //update user
+            await User.updateOne(
+                { email: email },
+                { $pull : { postsIds: post._id } }
+            );
+            //delete post
+            await Post.findOneAndDelete({ title });
+            return res.status(201).json({message: 'Post deleted successfully!'});
+        } else {
+            return res.status(201).json({message: "No such user's post found!"});
+        }
     } catch (e) {
         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
     }
 });
 
-router.get('/get/:email', async (req, res) => {
+router.get('/get/:email', 
+    async (req, res) => {
     try {
         const email = req.params.email;
+        if(!email) {
+            return res.status(400).json({message: 'No such user!'});
+        }
 
         let postObjs = [];
 
         let user = await User.findOne({ email });
 
-        for(const postId of user.postsIds) {
-            const post = await Post.findOne({ _id: postId });
-            let postObj = {
-                title: post.title,
-                subtitle: post.subtitle,
-                images: []
-            };
-            for(const imageId of post.imagesIds) {
-                const image = await Img.findOne({_id: imageId});
-                postObj.images.push({
-                    data: image.img.data, 
-                    type: image.img.contentType
-                });
-            }
-            postObjs.push(postObj);
+        if(user) {
+            for(const postId of user.postsIds) {
+                const post = await Post.findOne({ _id: postId });
+                let postObj = {
+                    title: post.title,
+                    subtitle: post.subtitle,
+                    images: []
+                };
+                for(const imageId of post.imagesIds) {
+                    const image = await Img.findOne({_id: imageId});
+                    // if(!image) {
+                    //     await post.updateOne({
+                    //         $pull : { imagesIds: imageId }
+                    //     });
+                    // } else {
+                        postObj.images.push({
+                            data: image.img.data, 
+                            type: image.img.contentType
+                        });    
+                    // }
+                }
+                postObjs.push(postObj);
+            }    
+        } else {
+            return res.status(400).json({message: 'No such user!'});
         }
         
         if(postObjs.length !== 0) {
@@ -190,7 +214,8 @@ router.get('/get/:email', async (req, res) => {
     }
 });
 
-router.get('/getAll', async (req, res) => {
+router.get('/getAll', 
+    async (req, res) => {
     try {
         let postObjs = [];
         let posts = await Post.find();
@@ -204,10 +229,16 @@ router.get('/getAll', async (req, res) => {
                 };
                 for(const imageId of post.imagesIds) {
                     const image = await Img.findOne({_id: imageId});
-                    postObj.images.push({
-                        data: image.img.data, 
-                        type: image.img.contentType
-                    });
+                    // if(!image) {
+                    //     await post.updateOne({
+                    //         $pull : { imagesIds: imageId }
+                    //     });
+                    // } else {
+                        postObj.images.push({
+                            data: image.img.data, 
+                            type: image.img.contentType
+                        });
+                    // }
                 }
                 postObjs.push(postObj);
             }

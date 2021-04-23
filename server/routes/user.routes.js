@@ -1,6 +1,8 @@
 import express from 'express';
 import { auth } from '../middleware/auth.middleware.js';
-import { User } from '../models/User.js'
+import { User } from '../models/User.js';
+import { Post } from '../models/Post.js';
+import { Img } from '../models/Img.js';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import path from 'path';
@@ -79,36 +81,33 @@ router.get('/delete', (req, res) => {
     res.sendFile(path.join(__dirname,'static/deleteUser.html'));
 });
 
-router.delete('/delete', auth,
-    body('email').normalizeEmail().isEmail(),
-    body('password').isLength({min:5, max:30}),
+router.delete('/delete/:email',
     async (req, res) => {
     try {
-        const errors = validationResult(req);
+        const email = req.params.email;
 
-        if(!errors.isEmpty()) {
-            return res.status(400).json({
-                errors: errors.array(),
-                message: 'Wrong data on register!'
-            });
+        if(!email) {
+            return res.status(400).json({message: 'No such user!'});
         }
 
-        // const email = req.body.email;
-
-        // for(const postId of req.user.postsIds) {
-        //     const post = await Post.findOne({_id: postId});
-        //     console.log('  '+post.title);
-        //     for(const imageId of post.imagesIds) {
-        //         const image = await Img.findOne({_id: imageId});
-        //         console.log('    '+image.name);
-        //     }
-        // }
-
-        await User.findOneAndDelete({ email });
+        const user = await User.findOne({ email });
+        if(!user) {
+            return res.status(400).json({message: 'No such user!'});
+        } else {
+            for(const postId of user.postsIds) {
+                const post = await Post.findOne({_id: postId});
+                for(const imageId of post.imagesIds) {
+                    await Img.findOneAndDelete({_id: imageId});
+                }
+                await Post.findOneAndDelete({_id: postId});
+            }
+            await User.findOneAndDelete({ email });
+        }
 
         return res.status(201).json({message: 'User and his data deleted successfully!'});
 
     } catch (e) {
+        console.log(e);
         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
     }
 });

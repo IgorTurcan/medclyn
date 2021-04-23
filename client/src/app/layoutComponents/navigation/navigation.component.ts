@@ -8,95 +8,95 @@ import { SignInPortfolioComponent } from 'src/app/smallComponents/accountDialogs
 import { SignUpPortfolioComponent } from 'src/app/smallComponents/accountDialogs/signUp/signUpPortfolio.component';
 
 @Component({
-  selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+	selector: 'app-navigation',
+	templateUrl: './navigation.component.html',
+	styleUrls: ['./navigation.component.scss']
 })
 
 export class NavigationComponent implements OnInit {
-  @ViewChild('drawer') sidenav: MatSidenav;
-  @ViewChild('top') top : ElementRef;
+	@ViewChild('drawer') sidenav: MatSidenav;
+	@ViewChild('top') top : ElementRef;
 
-  logInOrLogOut = 'Loghează-te';
-  registerOrUsername = 'Creează un cont';
+	logInOrLogOut = 'Loghează-te';
+	registerOrUsername = 'Creează un cont';
 
-  innerWidth: number;
+	innerWidth: number;
 
-  dialogWidth: number;
-  dialogHight: number;
+	dialogWidth: number;
+	dialogHight: number;
 
-  constructor(
-    private router: Router,
-    public dialog: MatDialog, 
-    private _snackBar: MatSnackBar,
-    private authService: AuthService) {
-      router.events.forEach((event) => {
-        if(event instanceof NavigationEnd) {
-          this.top.nativeElement.scrollIntoView();
-        }
-      });
-  }
+	constructor(
+		private router: Router,
+		public dialog: MatDialog, 
+		private _snackBar: MatSnackBar,
+		private authService: AuthService) {
+			router.events.forEach((event) => {
+				if(event instanceof NavigationEnd) {
+					this.top.nativeElement.scrollIntoView();
+				}
+			});
+	}
 
-  ngOnInit() {
-    this.changeOnAuth();
-    this.onResize()
-  }
+	ngOnInit() {
+		this.changeOnAuth();
+		this.onResize()
+	}
 
-  close() {
-    this.sidenav.close();
-  }
+	close() {
+		this.sidenav.close();
+	}
 
-  toHome() {
-    this.router.navigate(['/home']);
-  }
+	toHome() {
+		this.router.navigate(['/home']);
+	}
 
-  mobileSize(): boolean {
-    return this.innerWidth <= 900;
-  }
+	mobileSize(): boolean {
+		return this.innerWidth <= 900;
+	}
 
-  logInOrLogOutFunc() { 
-    if(this.authService.isAuthenticated()) {
-      this.authService.logOut();
-      if(this.router.url === '/portfolio/edit/user') {
-        this.router.navigate(['/portfolio']);
-      }
-      this._snackBar.open("User logged out successful!", "OK!", {
-        duration: 5000,
-      }); 
-    } else {
-      let dialogRef = this.dialog.open(SignInPortfolioComponent, {
-        width: `${this.dialogWidth}`,
-        height: `${this.dialogHight}`,
-        data: { }
-      });
-    }
-  }
+	logInOrLogOutFunc() { 
+		if(this.authService.isAuthenticated()) {
+			this.authService.logOut();
+			if(this.router.url === '/portfolio/edit/user') {
+				this.router.navigate(['/portfolio']);
+			}
+			this._snackBar.open("User logged out successful!", "OK!", {
+				duration: 5000,
+			}); 
+		} else {
+			let dialogRef = this.dialog.open(SignInPortfolioComponent, {
+				width: `${this.dialogWidth}`,
+				height: `${this.dialogHight}`,
+				data: { }
+			});
+		}
+	}
 
-  registerOrUsernameFunc() { 
-    if(!this.authService.isAuthenticated()) {
-      this.dialog.open(SignUpPortfolioComponent, {
-        width: `${this.dialogWidth}`,
-        height: `${this.dialogHight}`,
-        data: { }
-      });
-    }
-  }
+	registerOrUsernameFunc() { 
+		if(!this.authService.isAuthenticated()) {
+			this.dialog.open(SignUpPortfolioComponent, {
+				width: `${this.dialogWidth}`,
+				height: `${this.dialogHight}`,
+				data: { }
+			});
+		}
+	}
 
-  changeOnAuth() {
-    this.authService.getEvent()
-    .subscribe( res => {
-      if(res) {
-        this.logInOrLogOut = 'Deconectează-te';
-        this.registerOrUsername = this.authService.getEmail();
-      } else {
-        this.logInOrLogOut = 'Loghează-te';
-        this.registerOrUsername = 'Creează un cont';
-      }
-    });
-  }
+	changeOnAuth() {
+		this.authService.getEvent()
+		.subscribe( res => {
+			if(res) {
+				this.logInOrLogOut = 'Deconectează-te';
+				this.registerOrUsername = this.authService.getEmail();
+			} else {
+				this.logInOrLogOut = 'Loghează-te';
+				this.registerOrUsername = 'Creează un cont';
+			}
+		});
+	}
 
-  onResize() { this.innerWidth = window.innerWidth; }
+	onResize() { this.innerWidth = window.innerWidth; }
 
-  @HostListener('window:resize') handle() { this.onResize(); }
+	@HostListener('window:resize') handle() { this.onResize(); }
 
 }

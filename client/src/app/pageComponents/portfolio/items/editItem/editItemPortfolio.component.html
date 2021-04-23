@@ -1,61 +1,61 @@
 <form [formGroup]="Data">
-    <h1 mat-dialog-title>Editează postarea</h1>
+	<h1 mat-dialog-title>Editează postarea</h1>
 
-    <mat-form-field class="input" appearance="fill">
-        <mat-label>Fosta denumire</mat-label>
-        <input matInput class="oldTitle"
-        [class.is-invalid]="cardOldTitle.invalid"
-        formControlName="cardOldTitle">
-        <mat-hint *ngIf="cardOldTitle.invalid">
-            <small *ngIf="cardOldTitle.errors?.pattern" class="text-danger">
-                Denumirea trebuie să conţină între 3 şi 35 litere ale alfabetului român
-            </small>
-        </mat-hint>
-    </mat-form-field>
+	<mat-form-field class="input" appearance="fill">
+		<mat-label>Fosta denumire</mat-label>
+		<input matInput class="oldTitle"
+		[class.is-invalid]="cardOldTitle.invalid"
+		formControlName="cardOldTitle">
+		<mat-hint *ngIf="cardOldTitle.invalid">
+			<small *ngIf="cardOldTitle.errors?.pattern" class="text-danger">
+				Denumirea trebuie să conţină între 3 şi 35 litere ale alfabetului român
+			</small>
+		</mat-hint>
+	</mat-form-field>
 
-    <mat-form-field class="input" appearance="fill">
-        <mat-label>Noua denumire</mat-label>
-        <input matInput class="newTitle"
-        [class.is-invalid]="cardNewTitle.invalid"
-        formControlName="cardNewTitle">
-        <mat-hint *ngIf="cardNewTitle.invalid">
-            <small *ngIf="cardNewTitle.errors?.pattern" class="text-danger">
-                Denumirea trebuie să conţină între 3 şi 35 litere ale alfabetului român
-            </small>
-        </mat-hint>
-    </mat-form-field>
+	<mat-form-field class="input" appearance="fill">
+		<mat-label>Noua denumire</mat-label>
+		<input matInput class="newTitle"
+		[class.is-invalid]="cardNewTitle.invalid"
+		formControlName="cardNewTitle">
+		<mat-hint *ngIf="cardNewTitle.invalid">
+			<small *ngIf="cardNewTitle.errors?.pattern" class="text-danger">
+				Denumirea trebuie să conţină între 3 şi 35 litere ale alfabetului român
+			</small>
+		</mat-hint>
+	</mat-form-field>
 
-    <mat-form-field class="input" appearance="fill">
-        <mat-label>Locație</mat-label>
-        <input matInput class="subtitle"
-        [class.is-invalid]="cardSubtitle.invalid"
-        formControlName="cardSubtitle">
-        <mat-hint *ngIf="cardSubtitle.invalid">
-            <small *ngIf="cardSubtitle.errors?.pattern" class="text-danger">
-                Locația trebuie să conţină între 3 şi 45 litere ale alfabetului român
-            </small>
-        </mat-hint>
-    </mat-form-field>
+	<mat-form-field class="input" appearance="fill">
+		<mat-label>Locație</mat-label>
+		<input matInput class="subtitle"
+		[class.is-invalid]="cardSubtitle.invalid"
+		formControlName="cardSubtitle">
+		<mat-hint *ngIf="cardSubtitle.invalid">
+			<small *ngIf="cardSubtitle.errors?.pattern" class="text-danger">
+				Locația trebuie să conţină între 3 şi 45 litere ale alfabetului român
+			</small>
+		</mat-hint>
+	</mat-form-field>
 
-    <mat-chip-list cdkDropList 
-    cdkDropListOrientation="horizontal">
-        <mat-chip cdkDrag 
-        *ngFor="let imageName of imageNames" 
-        [selectable]="true" [removable]="true" (removed)="remove(imageName)">
-        {{imageName}}
-        <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-        <mat-chip>
-            <label for="file"><mat-icon>add_circle_outline</mat-icon></label>
-        </mat-chip>
-        <input type="file" name="file" id="file" class="inputfile"
-        accept=".jpg, .png, .jpeg"
-        (change)="onFileChanged($event)" style="visibility: hidden;"/>
-    </mat-chip-list>
+	<mat-chip-list cdkDropList 
+	cdkDropListOrientation="horizontal">
+		<mat-chip cdkDrag 
+		*ngFor="let imageName of imageNames" 
+		[selectable]="true" [removable]="true" (removed)="remove(imageName)">
+		{{imageName}}
+		<mat-icon matChipRemove>cancel</mat-icon>
+		</mat-chip>
+		<mat-chip>
+			<label for="file"><mat-icon>add_circle_outline</mat-icon></label>
+		</mat-chip>
+		<input type="file" name="file" id="file" class="inputfile"
+		accept=".jpg, .png, .jpeg"
+		(change)="onFileChanged($event)" style="visibility: hidden;"/>
+	</mat-chip-list>
 
-    <div class="action" mat-dialog-actions>
-        <button mat-raised-button 
-            [disabled]="(!cardOldTitle.invalid && !cardNewTitle.invalid && !cardSubtitle.invalid) ? false : true"
-        (click)="update()">Editează</button>        
-    </div>
+	<div class="action" mat-dialog-actions>
+		<button mat-raised-button 
+			[disabled]="(!cardOldTitle.invalid && !cardNewTitle.invalid && !cardSubtitle.invalid) ? false : true"
+		(click)="update()">Editează</button>        
+	</div>
 </form>

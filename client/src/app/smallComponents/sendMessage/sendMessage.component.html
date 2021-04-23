@@ -1,64 +1,64 @@
 <form [formGroup]="userData">
-  <h1 mat-dialog-title>Trimite-ne un mesaj</h1>
+	<h1 mat-dialog-title>Trimite-ne un mesaj</h1>
 
-  <mat-form-field class="input" appearance="fill">
-    <mat-label>Nume</mat-label>
-    <input matInput class="name"
-    [class.is-invalid]="userName.invalid && userName.touched" 
-    formControlName="userName">
-    <mat-hint *ngIf="(userName.invalid && userName.touched) || userName.dirty">
-      <small *ngIf="userName.errors?.required" class="text-danger">
-        Intruduceți un nume (și prenume)</small>
-      <small *ngIf="userName.errors?.pattern" class="text-danger">
-        Intruduceți un nume (și prenume) de minim 2 caractere</small>
-    </mat-hint>
-  </mat-form-field>
+	<mat-form-field class="input" appearance="fill">
+		<mat-label>Nume</mat-label>
+		<input matInput class="name"
+		[class.is-invalid]="userName.invalid && userName.touched" 
+		formControlName="userName">
+		<mat-hint *ngIf="(userName.invalid && userName.touched) || userName.dirty">
+			<small *ngIf="userName.errors?.required" class="text-danger">
+				Intruduceți un nume (și prenume)</small>
+			<small *ngIf="userName.errors?.pattern" class="text-danger">
+				Intruduceți un nume (și prenume) de minim 2 caractere</small>
+		</mat-hint>
+	</mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
-    <mat-label>Subiect</mat-label>
-    <input matInput class="subject"
-    [class.is-invalid]="userSubject.invalid && userSubject.touched" 
-    formControlName="userSubject">
-    <mat-hint *ngIf="(userSubject.invalid && userSubject.touched) || userSubject.dirty">
-      <small *ngIf="userSubject.errors?.required" class="text-danger">
-        Intruduceți un subiect</small>
-      <small *ngIf="userSubject.errors?.pattern" class="text-danger">
-        Intruduceți un subiect de minim 2 caractere</small>
-    </mat-hint>
-  </mat-form-field>
+	<mat-form-field class="input" appearance="fill">
+		<mat-label>Subiect</mat-label>
+		<input matInput class="subject"
+		[class.is-invalid]="userSubject.invalid && userSubject.touched" 
+		formControlName="userSubject">
+		<mat-hint *ngIf="(userSubject.invalid && userSubject.touched) || userSubject.dirty">
+			<small *ngIf="userSubject.errors?.required" class="text-danger">
+				Intruduceți un subiect</small>
+			<small *ngIf="userSubject.errors?.pattern" class="text-danger">
+				Intruduceți un subiect de minim 2 caractere</small>
+		</mat-hint>
+	</mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
-    <mat-label>Email</mat-label>
-    <input matInput class="email"
-    [class.is-invalid]="userEmail.invalid && userEmail.touched" 
-    formControlName="userEmail" >
-    <mat-hint *ngIf="(userEmail.invalid && userEmail.touched) || userEmail.dirty">
-      <small *ngIf="userEmail.errors?.required" class="text-danger">
-        Intruduceți un email</small>
-      <small *ngIf="userEmail.errors?.pattern" class="text-danger">
-        Intruduceți un email valid</small>
-    </mat-hint>
-  </mat-form-field>
+	<mat-form-field class="input" appearance="fill">
+		<mat-label>Email</mat-label>
+		<input matInput class="email"
+		[class.is-invalid]="userEmail.invalid && userEmail.touched" 
+		formControlName="userEmail" >
+		<mat-hint *ngIf="(userEmail.invalid && userEmail.touched) || userEmail.dirty">
+			<small *ngIf="userEmail.errors?.required" class="text-danger">
+				Intruduceți un email</small>
+			<small *ngIf="userEmail.errors?.pattern" class="text-danger">
+				Intruduceți un email valid</small>
+		</mat-hint>
+	</mat-form-field>
 
-  <mat-form-field class="textarea" appearance="fill">
-    <mat-label>Mesaj</mat-label>
-    <textarea rows="3" matInput class="message"
-    [class.is-invalid]="userMessage.invalid && userMessage.touched"
-    formControlName="userMessage"></textarea>
-    <mat-hint *ngIf="(userMessage.invalid && userMessage.touched) || userMessage.dirty">
-      <small *ngIf="userMessage.errors?.required" class="text-danger">Scrieți ceva</small>
-    </mat-hint>
-  </mat-form-field>
+	<mat-form-field class="textarea" appearance="fill">
+		<mat-label>Mesaj</mat-label>
+		<textarea rows="3" matInput class="message"
+		[class.is-invalid]="userMessage.invalid && userMessage.touched"
+		formControlName="userMessage"></textarea>
+		<mat-hint *ngIf="(userMessage.invalid && userMessage.touched) || userMessage.dirty">
+			<small *ngIf="userMessage.errors?.required" class="text-danger">Scrieți ceva</small>
+		</mat-hint>
+	</mat-form-field>
 
-  <div class="action" mat-dialog-actions>
-    <button mat-raised-button [disabled]="
-      ((!userName.invalid && userName.touched) &&
-      (!userSubject.invalid && userSubject.touched) &&
-      (!userEmail.invalid && userEmail.touched) &&
-      (!userMessage.invalid && userMessage.touched)) ? false : true" 
-      (click)="sendEmail()">
-      <mat-icon>send</mat-icon>
-      Trimite
-    </button>
-  </div>
+	<div class="action" mat-dialog-actions>
+		<button mat-raised-button [disabled]="
+			((!userName.invalid && userName.touched) &&
+			(!userSubject.invalid && userSubject.touched) &&
+			(!userEmail.invalid && userEmail.touched) &&
+			(!userMessage.invalid && userMessage.touched)) ? false : true" 
+			(click)="sendEmail()">
+			<mat-icon>send</mat-icon>
+			Trimite
+		</button>
+	</div>
 </form>

@@ -1,4 +1,4 @@
-<div class="grid" *ngIf="haveAnyPost()">
+<div class="grid" *ngIf="haveAnyPost">
 	<div class="grid-item">
 		<mat-spinner></mat-spinner>
 	</div>
@@ -6,7 +6,7 @@
 <div  [ngClass]="{
 	'grid-container c1': (innerWidth > 1000),
 	'grid-container c2': (innerWidth <= 1000)
- }" *ngIf="!haveAnyPost()">
+ }" *ngIf="!haveAnyPost">
 	<div class="grid-item" *ngFor="let portfolioCard of portfolioCards">
 		<mat-card class="card">
 			<mat-card-header>
