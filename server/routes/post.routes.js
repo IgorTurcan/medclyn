@@ -38,10 +38,7 @@ router.post('/add', uploadFiles,
         for(let i=0; i<req.files.length; i++) {
             const image = new Img({
                 name: req.files[i].originalname,
-                img: {
-                    data: fs.readFileSync(path.join(__dirname,'uploads',req.files[i].originalname)),
-                    contentType: req.files[i].mimetype
-                }
+                path: path.join('D:/WebDev/medclyn/client/src/assets/uploads', req.files[i].originalname)
             });
             await image.save();
             images.push(image);
@@ -57,10 +54,8 @@ router.post('/add', uploadFiles,
             { $push : { postsIds: post } }
         );
 
-        await cleanUploads();
         return res.status(201).json({message: 'Post added successfully!'});
     } catch (e) {
-        await cleanUploads();
         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
     }
 });
@@ -100,10 +95,7 @@ router.put('/edit', uploadFiles,
             for(let i=0; i<req.files.length; i++) {
                 const image = new Img({
                     name: req.files[i].originalname,
-                    img: {
-                        data: fs.readFileSync(path.join(__dirname,'uploads',req.files[i].originalname)),
-                        contentType: req.files[i].mimetype
-                    }
+                    path: path.join('D:/WebDev/medclyn/client/src/assets/uploads', req.files[i].originalname)
                 });
                 await image.save();
                 imagesIds.push(image['_id']);
@@ -118,10 +110,8 @@ router.put('/edit', uploadFiles,
             return res.status(400).json({message: 'No such post!'});
         }
 
-        await cleanUploads();
         return res.status(202).json({message: 'Post edited successfully!'});
     } catch (e) {
-        await cleanUploads();
         return res.status(500).json({message: 'Something went wrong!', error: `${e}`});
     }
 });
@@ -187,16 +177,15 @@ router.get('/get/:email',
                 };
                 for(const imageId of post.imagesIds) {
                     const image = await Img.findOne({_id: imageId});
-                    // if(!image) {
-                    //     await post.updateOne({
-                    //         $pull : { imagesIds: imageId }
-                    //     });
-                    // } else {
+                    if(!image) {
+                        await post.updateOne({
+                            $pull : { imagesIds: imageId }
+                        });
+                    } else {
                         postObj.images.push({
-                            data: image.img.data, 
-                            type: image.img.contentType
-                        });    
-                    // }
+                            path: image.path 
+                        });
+                    }
                 }
                 postObjs.push(postObj);
             }    
@@ -229,16 +218,15 @@ router.get('/getAll',
                 };
                 for(const imageId of post.imagesIds) {
                     const image = await Img.findOne({_id: imageId});
-                    // if(!image) {
-                    //     await post.updateOne({
-                    //         $pull : { imagesIds: imageId }
-                    //     });
-                    // } else {
-                        postObj.images.push({
-                            data: image.img.data, 
-                            type: image.img.contentType
+                    if(!image) {
+                        await post.updateOne({
+                            $pull : { imagesIds: imageId }
                         });
-                    // }
+                    } else {
+                        postObj.images.push({
+                            path: image.path
+                        });
+                    }
                 }
                 postObjs.push(postObj);
             }
@@ -253,15 +241,3 @@ router.get('/getAll',
 });
 
 export { router };
-
-async function cleanUploads() {
-    fs.readdir('./uploads', (err, files) => {
-        if(err) throw err;
-      
-        for (const file of files) {
-            fs.unlink(path.join('./uploads', file), err => {
-                if (err) throw err;
-            });
-        }
-    });
-}

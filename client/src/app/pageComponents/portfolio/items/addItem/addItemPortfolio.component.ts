@@ -69,6 +69,7 @@ export class AddItemPortfolioComponent {
 		this.apiService.postAdd(email,title,subtitle,this.images)
 		.subscribe(
 			(res) => {
+				
 				this._snackBar.open(res[Object.keys(res)[0]], "Great!", {
 					duration: 5000,
 				});

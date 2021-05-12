@@ -71,9 +71,9 @@ export class PortfolioEditUserComponent implements OnInit {
 			data: { }
 		});
 
-		// dialogRef.afterClosed().subscribe( () => {
-		// 	this.setPosts();
-		// });
+		dialogRef.afterClosed().subscribe( () => {
+			this.setPosts();
+		});
 	}
 
 	goEdit(index: number) {
@@ -83,9 +83,9 @@ export class PortfolioEditUserComponent implements OnInit {
 			data: { portfolioCard: this.portfolioCards[index] }
 		});
 
-		// dialogRef.afterClosed().subscribe( () => {
-		// 	this.setPosts();
-		// });
+		dialogRef.afterClosed().subscribe( () => {
+			this.setPosts();
+		});
 	}
 
 	delete(index: number, title: string) {
@@ -163,10 +163,9 @@ export class PortfolioEditUserComponent implements OnInit {
 							let pathArray = [];
 							let imageArray = [];
 							for(const image of post[Object.keys(post)[2]]){
-								const dataFormat = 'data:'+image[Object.keys(image)[1]]+';base64,';
-								const imageData = this.sanitize(dataFormat+this._arrayBufferToBase64(image.data.data));
-								pathArray.push(imageData['changingThisBreaksApplicationSecurity']);
-								imageArray.push({image: imageData['changingThisBreaksApplicationSecurity']});
+								const path = image.path.slice(image.path.indexOf("assets"));
+								pathArray.push(path);
+								imageArray.push({image: path});
 							}
 							this.portfolioCards.push(new portfolioCard(
 								post[Object.keys(post)[0]], post[Object.keys(post)[1]], pathArray, imageArray
@@ -197,18 +196,4 @@ export class PortfolioEditUserComponent implements OnInit {
 	}
 
 	@HostListener('window:resize') handle() { this.onResize(); }
-	
-	_arrayBufferToBase64(buffer) {
-		let binary = '';
-		let bytes = new Uint8Array(buffer);
-		let len = bytes.byteLength;
-		for (let i = 0; i < len; i++) {
-			binary += String.fromCharCode(bytes[i]);
-		}
-		return window.btoa(binary);
-	}
-
-	sanitize(url:string) {
-		return this.sanitizer.bypassSecurityTrustUrl(url);
-	}
 }

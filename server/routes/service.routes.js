@@ -12,12 +12,14 @@ router.post('/sendEmail',
         const message = req.body.message;
 
         const user = {
-            email: process.env.EMAIL || '',
-            pass: process.env.PASS || ''
+            email: process.env.EMAIL || '---',
+            pass: process.env.PASS || '---'
         }
 
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
             auth: {
               user: user.email,
               pass: user.pass

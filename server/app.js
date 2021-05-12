@@ -13,7 +13,7 @@ const __dirname = path.resolve();
 
 const app = express();
 const port = process.env.PORT || 5000;
-const mongodb_url = process.env.MONGODB_URL || '';
+const mongodb_url = process.env.MONGODB_URL || '---';
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));

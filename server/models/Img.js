@@ -1,9 +1,9 @@
 import pkg from 'mongoose';
-const {Schema, model, Types} = pkg;
+const {Schema, model} = pkg;
 
 const schema = new Schema({
 	name: {type: String, required: true},
-	img: {data: Buffer, contentType: String},
+	path: {type: String, required: true},
 });
 
 const Img = model('Img', schema);
